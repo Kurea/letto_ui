@@ -1,0 +1,43 @@
+* { box-sizing: border-box; }
+
+body { font-family: sans-serif; }
+
+.draggable {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background: #F90;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+.draggable.is-pointer-down {
+  background: #09F;
+}
+.draggable.is-dragging { opacity: 0.7; }
+
+.draggable > * {
+  position: relative;
+}
+
+.draggable .handle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.point {
+  background: #555;
+  background: hsla(0, 0%, 0%, 0.4);
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+}
+
+.line {
+  border: 1px solid black;
+  height: 0px;
+  position: absolute;
+}
