@@ -3,48 +3,10 @@ class Line {
     // create new div
     this.elem = container.createElement('div');
     this.elem.className = "line";
+    this.elem.jsObject = this;
     // update config
     container.querySelector(".zone").appendChild(this.elem);
     Line.all.push(this);
-    this.elem.onmouseup = function(e) {console.log("line up");}
-  }
-
-  updateFromStartPoint() {
-    var rectPoint = this.startPoint.getBoundingClientRect();
-    this.x1 = rectPoint.left + ( ( rectPoint.right - rectPoint.left )  / 2 );
-    this.y1 = rectPoint.top + ( ( rectPoint.bottom - rectPoint.top ) / 2 );
-  }
-
-  updateFromEndPoint() {
-    var rectPoint = this.endPoint.getBoundingClientRect();
-    this.x2 = rectPoint.left + ( ( rectPoint.right - rectPoint.left ) / 2 );
-    this.y2 = rectPoint.top + ( ( rectPoint.bottom - rectPoint.top ) / 2 );
-  }
-
-  start(point) {
-    this.startPoint = point;
-    this.updateFromStartPoint();
-    this.x2 = this.x1;
-    this.y2 = this.y2;
-    this.update();
-  }
-
-  end(point) {
-    if(this.startPoint !== point) {
-      this.endPoint = point;
-      this.updateFromEndPoint();
-      this.update();
-    }
-    else {
-      this.delete();
-    }
-  }
-
-  delete() {
-    this.elem.parentElement.removeChild(this.elem);
-    var i = 0;
-    while (Line.all[i] !== this) { i++; }
-    Line.all.splice(i, 1);
   }
 
   updateElement(x, y, length, angle) {
@@ -58,13 +20,18 @@ class Line {
     this.elem.setAttribute('style', styles);
   }
 
-  update() {
-    var a = this.x1 - this.x2,
-        b = this.y1 - this.y2,
+  update(x2, y2) {
+    var x1 = this.startPoint.getX();
+    var y1 = this.startPoint.getY();
+    x2 = (typeof x2 !== 'undefined') ? x2 : this.endPoint.getX(),
+    y2 = (typeof y2 !== 'undefined') ? y2 : this.endPoint.getY();
+
+    var a = x1 - x2,
+        b = y1 - y2,
         c = Math.sqrt(a * a + b * b);
 
-    var sx = (this.x1 + this.x2) / 2,
-        sy = (this.y1 + this.y2) / 2;
+    var sx = (x1 + x2) / 2,
+        sy = (y1 + y2) / 2;
 
     var x = sx - c / 2,
         y = sy;
@@ -75,24 +42,38 @@ class Line {
   }
 
   updateWithDraggie(draggie) {
-    var points = draggie.querySelectorAll(".point");
-    for (var i = 0, l = points.length ; i<l ; i++) {
-      point = points[i];
-      if (this.startPoint === point) {
-        this.updateFromStartPoint();
-        this.update();
-      }
-      if (this.endPoint === point) {
-        this.updateFromEndPoint();
-        this.update();
-      }
-    }
+    this.update();
   }
 
   updateFromMouse(x, y) {
-    this.x2 = x;
-    this.y2 = y;
-    this.update();
+    this.update(x, y);
+  }
+
+  delete() {
+    this.elem.parentElement.removeChild(this.elem);
+    var i = 0;
+    while (Line.all[i] !== this) { i++; }
+    Line.all.splice(i, 1);
+  }
+
+  start(point) {
+    this.startPoint = point;
+    this.update(this.startPoint.getX(), this.startPoint.getY());
+  }
+
+  end(point) {
+    if(this.startPoint !== point) {
+      this.endPoint = point;
+      this.update();
+    }
+    else {
+      this.delete();
+    }
+    this.elem.onclick = function(e) {
+      if (confirm ("Vous allez supprimer cette ligne")){
+        this.jsObject.delete();
+      }
+    }
   }
 
   static each(fn, arg) {
