@@ -1,5 +1,5 @@
 class Line {
-  constructor(container) {
+  constructor(container, startPoint) {
     // create new div
     this.elem = container.createElement('div');
     this.elem.className = "line";
@@ -7,8 +7,12 @@ class Line {
     // update config
     container.querySelector(".zone").appendChild(this.elem);
     Line.all.push(this);
+
+    // start the line from startPoint
+    start(startPoint)
   }
 
+  // update the line display to match ethe geographic coordinates
   updateElement(x, y, length, angle) {
     var styles = 'width: ' + length + 'px; '
                + '-moz-transform: rotate(' + angle + 'rad); '
@@ -20,6 +24,7 @@ class Line {
     this.elem.setAttribute('style', styles);
   }
 
+  // calculate the geographic coordinates to update line display with optional coordinates for end point
   update(x2, y2) {
     var x1 = this.startPoint.getX();
     var y1 = this.startPoint.getY();
@@ -41,14 +46,17 @@ class Line {
     this.updateElement(x, y, c, alpha);
   }
 
+  // update line with draggable objects
   updateWithDraggie(draggie) {
     this.update();
   }
 
+  // update from mouse coordinates (so that the line follows the mouse)
   updateFromMouse(x, y) {
     this.update(x, y);
   }
 
+  // delete the line
   delete() {
     this.elem.parentElement.removeChild(this.elem);
     var i = 0;
@@ -56,11 +64,14 @@ class Line {
     Line.all.splice(i, 1);
   }
 
+  // start line from one point
   start(point) {
     this.startPoint = point;
     this.update(this.startPoint.getX(), this.startPoint.getY());
   }
 
+  // terminate line to one point if the point is not the start point
+  // TODO : update line or cancel it when the start and the end point are in the same handle
   end(point) {
     if(this.startPoint !== point) {
       this.endPoint = point;
@@ -69,6 +80,7 @@ class Line {
     else {
       this.delete();
     }
+    // add event to remove line
     this.elem.onclick = function(e) {
       if (confirm ("Vous allez supprimer cette ligne")){
         this.jsObject.delete();
@@ -76,6 +88,7 @@ class Line {
     }
   }
 
+  // execute the fn function on each lines
   static each(fn, arg) {
     var l = Line.all.length;
     for (var i=0; i < l; i++) {
