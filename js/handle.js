@@ -1,5 +1,7 @@
 class Handle {
-  constructor(container, inPoints) {
+  constructor(container, name,inPoints) {
+    this.name = name;
+
     // create new draggable div
     this.elem = container.ownerDocument.createElement('div');
     this.elem.className = "draggable";
@@ -20,10 +22,20 @@ class Handle {
 
     // make the lines to update with the hanlce
     // TODO : update only the lines connected to the handle
-    draggie.on( 'dragMove', function( event, pointer, moveVector )
-    {
+    draggie.on('dragMove', function( event, pointer, moveVector ){
       // todo for all lines
       Line.each("updateWithDraggie", event.target.parentNode);
+    });
+
+    draggie.on( 'staticClick', function(event, pointer) {
+      document.querySelector('#modale').style.display = 'block';
+      document.querySelector('#modulename').innerHTML = event.target.parentNode.jsObject.name;
+      Handle.currentHandle = event.target.parentNode.jsObject;
+      document.querySelector('#deletemodule').onclick = function(e) {
+        document.querySelector('#modale').style.display = 'none';
+        Handle.currentHandle.delete();
+        Handle.currentHandle = null;
+      };
     });
 
     // create the inputs points and save refs to them
@@ -51,6 +63,22 @@ class Handle {
     return (elem.x <= rectPoint.right) && (elem.x >= rectPoint.left) && (elem.y <= rectPoint.bottom) && (elem.y >= rectPoint.top);
   }
 
+  // delte the current handle
+  delete() {
+    // delte output point
+    this.out.delete();
+    // delte input points
+    for(var i=0, ln = this.in.length; i<ln; i++) {
+      this.in[i].delete();
+    }
+    // remove child from DOM
+    this.elem.parentElement.removeChild(this.elem, false);
+    // remove from static list
+    var i = 0;
+    while (Handle.all[i] !== this) { i++; }
+    Handle.all.splice(i, 1);
+  }
+
   // execute fn function on each elem
   static each(fn, arg) {
     var l = Point.all.length;
@@ -61,3 +89,4 @@ class Handle {
 
 }
 Handle.all = [];
+Handle.currentHandle = null;

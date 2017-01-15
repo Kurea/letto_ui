@@ -37,6 +37,18 @@ class Point {
     return (elem.x <= rectPoint.right) && (elem.x >= rectPoint.left) && (elem.y <= rectPoint.bottom) && (elem.y >= rectPoint.top);
   }
 
+  // remove current point
+  delete() {
+    // remove attached lines
+    Line.each("deleteWithPoint", this);
+    // remove from DOM
+    this.elem.parentElement.removeChild(this.elem, false);
+    // remove from static list
+    var i = 0;
+    while (Point.all[i] !== this) { i++; }
+    Point.all.splice(i, 1);
+  }
+
   // execute the fn function on each points
   static each(fn, arg) {
     var l = Point.all.length;

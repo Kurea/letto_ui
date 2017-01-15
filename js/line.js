@@ -60,7 +60,7 @@ class Line {
 
   // delete the line
   delete() {
-    this.elem.parentElement.removeChild(this.elem);
+    this.elem.parentElement.removeChild(this.elem, false);
     var i = 0;
     while (Line.all[i] !== this) { i++; }
     Line.all.splice(i, 1);
@@ -86,6 +86,13 @@ class Line {
       if (confirm ("Vous allez supprimer cette ligne")){
         this.jsObject.delete();
       }
+    }
+  }
+
+  // delete line if the point is a start or an end point of the line
+  deleteWithPoint(point) {
+    if (this.startPoint == point || this.endPoint == point) {
+      this.delete();
     }
   }
 
