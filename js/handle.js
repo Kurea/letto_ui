@@ -30,6 +30,7 @@ class Handle {
     draggie.on( 'staticClick', function(event, pointer) {
       document.querySelector('#modale').style.display = 'block';
       document.querySelector('#modulename').innerHTML = event.target.parentNode.jsObject.name;
+      // TODO : display param names and values
       Handle.currentHandle = event.target.parentNode.jsObject;
       document.querySelector('#deletemodule').onclick = function(e) {
         document.querySelector('#modale').style.display = 'none';
