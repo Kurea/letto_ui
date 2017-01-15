@@ -99,8 +99,8 @@ class Line {
   // execute the fn function on each lines
   static each(fn, arg) {
     var l = Line.all.length;
-    for (var i=0; i < l; i++) {
-      Line.all[i][fn](arg);
+    for (var i=l; i > 0; i--) {
+      Line.all[i-1][fn](arg);
     }
 };
 

@@ -52,8 +52,8 @@ class Point {
   // execute the fn function on each points
   static each(fn, arg) {
     var l = Point.all.length;
-    for (var i=0; i < l; i++) {
-      Point.all[i][fn](arg);
+    for (var i=l; i > 0; i--) {
+      Point.all[i-1][fn](arg);
     }
   };
 

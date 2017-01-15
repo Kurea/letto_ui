@@ -82,8 +82,8 @@ class Handle {
   // execute fn function on each elem
   static each(fn, arg) {
     var l = Point.all.length;
-    for (var i=0; i < l; i++) {
-      Point.all[i][fn](arg);
+    for (var i=l; i > 0; i--) {
+      Point.all[i-1][fn](arg);
     }
   };
 
