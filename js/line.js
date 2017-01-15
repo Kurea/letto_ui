@@ -60,7 +60,7 @@ class Line {
 
   // delete the line
   delete() {
-    this.elem.parentElement.removeChild(this.elem, false);
+    this.elem.remove();
     var i = 0;
     while (Line.all[i] !== this) { i++; }
     Line.all.splice(i, 1);

@@ -42,7 +42,7 @@ class Point {
     // remove attached lines
     Line.each("deleteWithPoint", this);
     // remove from DOM
-    this.elem.parentElement.removeChild(this.elem, false);
+    this.elem.remove();
     // remove from static list
     var i = 0;
     while (Point.all[i] !== this) { i++; }

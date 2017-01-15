@@ -72,7 +72,7 @@ class Handle {
       this.in[i].delete();
     }
     // remove child from DOM
-    this.elem.parentElement.removeChild(this.elem, false);
+    this.elem.remove(false);
     // remove from static list
     var i = 0;
     while (Handle.all[i] !== this) { i++; }
