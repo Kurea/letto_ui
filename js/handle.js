@@ -14,7 +14,8 @@ class Handle {
 
     // make the handle draggable
     var draggie = new Draggabilly( this.elem, {
-      handle: '.handle'
+      handle: '.handle',
+      containment: '.zone'
     });
 
     // make the lines to update with the hanlce
@@ -28,8 +29,10 @@ class Handle {
     // create the inputs points and save refs to them
     this.in = [];
     for (var i=0; i<inPoints; i++) {
-      this.in.push(new Point(this.elem, this));
+      this.in.push(new Point(this.elem, this, "in"));
     }
+
+    this.out = new Point(this.elem, this, "out");
 
     // save ref to this js object in the dom elem
     this.elem.jsObject = this;

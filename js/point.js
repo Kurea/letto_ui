@@ -1,8 +1,12 @@
 class Point {
-  constructor(container, handle) {
+  constructor(container, handle, type) {
+    this.type = type;
     // create new div
     this.elem = container.ownerDocument.createElement('div');
     this.elem.className = "point";
+    if (type == "out") {
+      this.elem.className += " out";
+    }
     this.elem.addEventListener("mousedown", CurrentLine.startLine, false);
     this.elem.jsObject = this;
     // add to document

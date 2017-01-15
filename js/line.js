@@ -9,7 +9,7 @@ class Line {
     Line.all.push(this);
 
     // start the line from startPoint
-    start(startPoint)
+    this.start(startPoint)
   }
 
   // update the line display to match ethe geographic coordinates
@@ -48,7 +48,9 @@ class Line {
 
   // update line with draggable objects
   updateWithDraggie(draggie) {
-    this.update();
+//    if (this.startPoint.handle.elem == draggie || this.endPoint.handle.elem == draggie) {
+      this.update();
+//    }
   }
 
   // update from mouse coordinates (so that the line follows the mouse)
@@ -70,10 +72,9 @@ class Line {
     this.update(this.startPoint.getX(), this.startPoint.getY());
   }
 
-  // terminate line to one point if the point is not the start point
-  // TODO : update line or cancel it when the start and the end point are in the same handle
+  // terminate line to one point if the point is not the start point and if the type of point is different (an input and an output) and the handle is different
   end(point) {
-    if(this.startPoint !== point) {
+    if(this.startPoint !== point && this.startPoint.type !== point.type && this.startPoint.handle !== point.handle) {
       this.endPoint = point;
       this.update();
     }
