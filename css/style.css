@@ -2,6 +2,60 @@
 
 body { font-family: sans-serif; }
 
+.content {
+  width: 100%;
+  display: table;
+}
+
+.zone {
+  width: 83%;
+  border: solid;
+  display: table-cell;
+}
+
+.moduleslist {
+  width: 17%;
+  border: solid;
+  display: table-cell;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+.moduleslist > dl {
+  margin: 0;
+  padding: 0 0 0 0;
+}
+
+.moduleslist > dl > dt {
+  background: #B8C1C8;
+  border-bottom: 1px solid #989EA4;
+  border-top: 1px solid #717D85;
+  color: #FFF;
+  font: bold 16px/19px Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 2px 0 0 12px;
+  position: -webkit-sticky;
+  position: sticky;
+  width: 99%;
+  top: -1px;
+}
+
+.moduleslist > dl > dd {
+  font: bold 18px/35px Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0 0 0 12px;
+  white-space: nowrap;
+}
+
+.moduleslist > dl > dd:active {
+  background: #6ab1d4;
+  color: white;
+}
+
+.moduleslist > dl > dd + dd {
+  border-top: 1px solid #CCC
+}
+
 .draggable {
   position: relative;
   width: 100px;
@@ -46,54 +100,4 @@ body { font-family: sans-serif; }
   border: 1px solid black;
   height: 0px;
   position: absolute;
-}
-
-.btnzone {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-}
-
-.btnzone > .fnbtn {
-  position : absolute;
-  bottom: 0;
-  right : 0;
-  border-radius:50%;
-  width:40px;
-  height:40px;
-  border:2px solid #6ab1d4;
-  text-align: center;
-  font-size: 15px;
-  font-family: monospace;
-  color: #6ab1d4;
-  line-height: 36px;
-}
-
-.btnzone > .fnbtn.fn1 {
-  bottom: 4px;
-  right : 81px;
-}
-
-.btnzone > .fnbtn.fn2 {
-  bottom: 42px;
-  right : 70px;
-}
-
-.btnzone > .fnbtn.fn3 {
-  bottom: 70px;
-  right : 42px;
-}
-
-.btnzone > .fnbtn.other {
-  bottom: 81px;
-  right : 4px;
-}
-
-.btnzone > .fnbtn.plusbtn {
-  width:60px;
-  height:60px;
-  background:#6ab1d4;
-  font-size: 50px;
-  color: white;
-  line-height: 56px;
 }
