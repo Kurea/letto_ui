@@ -1,5 +1,5 @@
 class Line {
-  constructor(container, startPoint) {
+  constructor(container) {
     // create new div
     this.elem = container.createElement('div');
     this.elem.className = "line";

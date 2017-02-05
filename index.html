@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <title>Draggabilly</title>
   <meta name="viewport" content="width=device-width">
-  <script src="https://npmcdn.com/draggabilly@2.1/dist/draggabilly.pkgd.js"></script>
+  <script src="js/lib/draggabilly.pkgd.js"></script>
   <script src="js/current_line.js"></script>
   <script src="js/menu.js"></script>
   <script src="js/point.js"></script>
   <script src="js/line.js"></script>
   <script src="js/handle.js"></script>
   <script src="js/index.js"></script>
+  <script src="js/wf_displayer.js"></script>
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -23,6 +24,8 @@
     <div class = "zone">
     </div>
   </div>
+  <button onclick="displayWorkflow(wf)">Display Workflow</button>
+  <button onclick="clearZone()">Clear Zone</button>
   <div>
     <div id="modale">
         <div class="popupblock">

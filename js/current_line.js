@@ -3,7 +3,7 @@ class CurrentLine {
   // start a new line
   static startLine(e) {
     // create new line with the clicked point as a start point
-    CurrentLine.currentLine = new Line(document, this.jsObject);
+    CurrentLine.currentLine = new Line(document);
     CurrentLine.currentLine.start(this.jsObject);
 
     if (CurrentLine.currentLine) {

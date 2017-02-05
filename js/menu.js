@@ -48,12 +48,12 @@ class Menu {
   // add a module to the board
   static addModule(name, inputs) {
     var zone = document.querySelector('.zone');
-    new Handle(zone, name, inputs);
+    return new Handle(zone, name, inputs);
   }
 
   // add an expression handle to the board
   addExpressionModule(e) {
-    Menu.addModule("expression", 0);
+    Menu.addModule("expression", []);
   }
 
   // add an operation handle to the board
@@ -66,6 +66,6 @@ class Menu {
   // add a comparisonModule to the board
   addComparisonModule(e) {
     var moduleToAdd = e.target.innerHTML;
-    Menu.addModule(moduleToAdd, 2);
+    Menu.addModule(moduleToAdd, ["*","*"]);
   }
 }
