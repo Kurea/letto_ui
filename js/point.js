@@ -1,6 +1,8 @@
 class Point {
-  constructor(container, handle, type) {
+  constructor(container, handle, type, acceptMultipleConnections) {
     this.type = type;
+    this.acceptMultipleConnections = acceptMultipleConnections;
+    this.lines = [];
     // create new div
     this.elem = container.ownerDocument.createElement('div');
     this.elem.className = "point";
@@ -40,13 +42,31 @@ class Point {
   // remove current point
   delete() {
     // remove attached lines
-    Line.each("deleteWithPoint", this);
+    //Line.each("deleteWithPoint", this);
+    var i;
+    for (i=0; i<this.lines.length; i++) {
+      this.lines[i].delete();
+    }
     // remove from DOM
     this.elem.remove();
     // remove from static list
-    var i = 0;
+    i = 0;
     while (Point.all[i] !== this) { i++; }
     Point.all.splice(i, 1);
+  }
+
+  addLine(line) {
+    if (this.lines.length == 0 || this.acceptMultipleConnections) {
+      this.lines.push(line);
+      return true;
+    }
+    return false;
+  }
+
+  removeLine(line) {
+    var i = 0;
+    while (this.lines[i] !== line) { i++; }
+    this.lines.splice(i, 1);
   }
 
   // execute the fn function on each points

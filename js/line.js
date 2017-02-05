@@ -9,7 +9,7 @@ class Line {
     Line.all.push(this);
 
     // start the line from startPoint
-    this.start(startPoint)
+//    this.start(startPoint);
   }
 
   // update the line display to match ethe geographic coordinates
@@ -61,6 +61,8 @@ class Line {
   // delete the line
   delete() {
     this.elem.remove();
+    if (this.startPoint) this.startPoint.removeLine(this);
+    if (this.endPoint) this.endPoint.removeLine(this);
     var i = 0;
     while (Line.all[i] !== this) { i++; }
     Line.all.splice(i, 1);
@@ -68,33 +70,44 @@ class Line {
 
   // start line from one point
   start(point) {
-    this.startPoint = point;
-    this.update(this.startPoint.getX(), this.startPoint.getY());
+    if (point.addLine(this)) {
+      this.startPoint = point;
+      this.update(this.startPoint.getX(), this.startPoint.getY());
+    }
+    else {
+      CurrentLine.removeEventAndRef();
+      this.delete();
+    }
   }
 
   // terminate line to one point if the point is not the start point and if the type of point is different (an input and an output) and the handle is different
   end(point) {
-    if(this.startPoint !== point && this.startPoint.type !== point.type && this.startPoint.handle !== point.handle) {
+    if(this.isAValidEndPoint(point)) {
       this.endPoint = point;
       this.update();
+      // add event to remove line
+      this.elem.onclick = function(e) {
+        if (confirm ("Vous allez supprimer cette ligne")){
+          this.jsObject.delete();
+        }
+      }
     }
     else {
+      CurrentLine.removeEventAndRef();
       this.delete();
-    }
-    // add event to remove line
-    this.elem.onclick = function(e) {
-      if (confirm ("Vous allez supprimer cette ligne")){
-        this.jsObject.delete();
-      }
     }
   }
 
-  // delete line if the point is a start or an end point of the line
-  deleteWithPoint(point) {
-    if (this.startPoint == point || this.endPoint == point) {
-      this.delete();
-    }
+  isAValidEndPoint(point) {
+    return this.startPoint !== point && this.startPoint.type !== point.type && this.startPoint.handle !== point.handle && point.addLine(this);
   }
+
+  // delete line if the point is a start or an end point of the line
+  //deleteWithPoint(point) {
+  //  if (this.startPoint == point || this.endPoint == point) {
+  //    this.delete();
+  //  }
+  //}
 
   // execute the fn function on each lines
   static each(fn, arg) {

@@ -1,5 +1,5 @@
 class Handle {
-  constructor(container, name,inPoints) {
+  constructor(container, name, inPoints) {
     this.name = name;
 
     // create new draggable div
@@ -10,6 +10,12 @@ class Handle {
     var h = container.ownerDocument.createElement('div');
     h.className = "handle"
     this.elem.appendChild(h);
+
+    // create text
+    var p = container.ownerDocument.createElement('p');
+    p.className = "label"
+    p.innerHTML = name;
+    this.elem.appendChild(p);
 
     // add handle to page
     container.appendChild(this.elem);
@@ -30,6 +36,7 @@ class Handle {
     draggie.on( 'staticClick', function(event, pointer) {
       document.querySelector('#modale').style.display = 'block';
       document.querySelector('#modulename').innerHTML = event.target.parentNode.jsObject.name;
+      document.querySelector('#modulecontent').innerHTML = event.target.parentNode.jsObject.inPoints;
       // TODO : display param names and values
       Handle.currentHandle = event.target.parentNode.jsObject;
       document.querySelector('#deletemodule').onclick = function(e) {
@@ -41,8 +48,11 @@ class Handle {
 
     // create the inputs points and save refs to them
     this.in = [];
-    for (var i=0; i<inPoints; i++) {
-      this.in.push(new Point(this.elem, this, "in"));
+    this.inPoints = inPoints;
+    var acceptMultipleConnections;
+    for (var i=0; i<inPoints.length; i++) {
+      acceptMultipleConnections = (inPoints[i].slice(-1) == "+");
+      this.in.push(new Point(this.elem, this, "in", acceptMultipleConnections));
     }
 
     this.out = new Point(this.elem, this, "out");

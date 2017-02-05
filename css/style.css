@@ -91,9 +91,18 @@ body { font-family: sans-serif; }
 }
 
 .point.out {
-    position : absolute;
-    margin-left: 40px;
-    top: 20px;
+  position : absolute;
+  margin-left: 40px;
+  top: 20px;
+}
+
+.draggable .label {
+  position: absolute;
+  top: -10px;
+  text-align: center;
+  left: 0px;
+  right: 0px;
+  font-size: small;
 }
 
 .line {
@@ -103,41 +112,41 @@ body { font-family: sans-serif; }
 }
 
 #modale {
-    display: none;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }
 
 label {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .labelButton {
-    border: 1px solid black;
-    padding: 5px 10px;
-    background-color: white;
-    position: absolute;
-    top: 25%;
-    left: 50px;
+  border: 1px solid black;
+  padding: 5px 10px;
+  background-color: white;
+  position: absolute;
+  top: 25%;
+  left: 50px;
 }
 
 .popupblock{
-    background: #fff;
-    padding: 20px;
-    border: 20px solid #ddd;
-    position: relative;
-    margin: 10% auto;
-    width: 40%;
-    box-shadow: 0px 0px 20px #000;
-    border-radius: 10px;
+  background: #fff;
+  padding: 20px;
+  border: 20px solid #ddd;
+  position: relative;
+  margin: 10% auto;
+  width: 40%;
+  box-shadow: 0px 0px 20px #000;
+  border-radius: 10px;
 }
 
 img.my_btn_close {
-    float: right;
-    margin: -55px -55px 0 0;
+  float: right;
+  margin: -55px -55px 0 0;
 }

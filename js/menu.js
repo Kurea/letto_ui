@@ -46,9 +46,9 @@ class Menu {
   }
 
   // add a module to the board
-  static addModule(name, nbInputs) {
+  static addModule(name, inputs) {
     var zone = document.querySelector('.zone');
-    new Handle(zone, name, nbInputs);
+    new Handle(zone, name, inputs);
   }
 
   // add an expression handle to the board
@@ -60,7 +60,7 @@ class Menu {
   addOperationModule(e) {
     var moduleToAdd = e.target.innerHTML;
     var args = EXPECTED_ARGS[moduleToAdd];
-    Menu.addModule( moduleToAdd, args.length);
+    Menu.addModule( moduleToAdd, args);
   }
 
   // add a comparisonModule to the board
