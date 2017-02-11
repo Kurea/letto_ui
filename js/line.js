@@ -102,6 +102,13 @@ class Line {
     return this.startPoint !== point && this.startPoint.type !== point.type && this.startPoint.handle !== point.handle && point.addLine(this);
   }
 
+  getOtherSideHandle(point) {
+    var otherSidePoint;
+    if(this.startPoint == point) otherSidePoint = this.endPoint;
+    if(this.endPoint == point) otherSidePoint = this.startPoint;
+    return otherSidePoint.handle;
+  }
+
   // delete line if the point is a start or an end point of the line
   //deleteWithPoint(point) {
   //  if (this.startPoint == point || this.endPoint == point) {

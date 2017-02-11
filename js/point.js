@@ -69,6 +69,20 @@ class Point {
     this.lines.splice(i, 1);
   }
 
+  hasLine() {
+    return this.lines.length !== 0
+  }
+
+  getOtherSideHandles() {
+    var ln = this.lines.length;
+    var i;
+    var handles = [];
+    for (i = 0; i<ln; i++) {
+      handles.push(this.lines[i].getOtherSideHandle(this));
+    }
+    return handles;
+  }
+
   // execute the fn function on each points
   static each(fn, arg) {
     var l = Point.all.length;

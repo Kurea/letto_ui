@@ -90,6 +90,17 @@ class Handle {
     Handle.all.splice(i, 1);
   }
 
+  hasNoOutput() {
+    if (this.out) {
+      return !this.out.hasLine();
+    }
+    return true;
+  }
+
+  getOtherSideHandles(input) {
+    return this.in[input].getOtherSideHandles();
+  }
+
   // execute fn function on each elem
   static each(fn, arg) {
     var l = Handle.all.length;
@@ -97,6 +108,17 @@ class Handle {
       Handle.all[i-1][fn](arg);
     }
   };
+
+  // return the first point for wich le fn function return true
+  static firstTo(fn, arg) {
+    var l = Handle.all.length;
+    for (var i=0; i < l; i++) {
+      if (Handle.all[i][fn](arg)) {
+        return Handle.all[i];
+      }
+    }
+  };
+
 
 }
 Handle.all = [];
