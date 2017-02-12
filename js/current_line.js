@@ -2,6 +2,8 @@ class CurrentLine {
 
   // start a new line
   static startLine(e) {
+    e.stopPropagation(); // still needed ?
+
     // create new line with the clicked point as a start point
     CurrentLine.currentLine = new Line(document);
     CurrentLine.currentLine.start(this.jsObject);

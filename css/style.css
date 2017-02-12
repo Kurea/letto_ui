@@ -19,6 +19,7 @@ body {
   width: 83%;
   border: solid;
   display: table-cell;
+  padding-left: 10px;
 }
 
 .moduleslist {
@@ -65,14 +66,15 @@ body {
 }
 
 .draggable {
-  position: absolute;;
+  position: absolute;
   width: 100px;
-  height: 100px;
   background: #F90;
   border-radius: 10px;
   padding: 20px;
-  margin-bottom: 10px;
+  padding-left: 0px;
+  padding-bottom: 10px;
 }
+
 .draggable.is-pointer-down {
   background: #09F;
 }
@@ -82,26 +84,72 @@ body {
   position: relative;
 }
 
-.draggable .handle {
+.draggable:hover {
+  cursor: move;
+}
+
+.draggable.is-pointer-down .point {
+  background: #7BD3FF;
+}
+
+.btndelete {
+  margin-top: -25px;
+  margin-left: 85px;
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  cursor: auto;
+  z-index: 1;
+}
+
+.btndelete:hover {
+  cursor: auto;
+}
+
+.input {
+  display: table-row;
+}
+
+.inputlabel {
+  font-size: x-small;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.inputfield {
+    width: 95%;
+    font-size: x-small;
+    margin-left: 10px;
+    height: 20px;
+    margin-bottom: 2px;
 }
 
 .point {
-  background: #555;
-  background: hsla(0, 0%, 0%, 0.4);
+  background: #995C00;
   width: 20px;
   height: 20px;
   border-radius: 5px;
+  margin-top: 0px;
+  margin-bottom: 2px;
+  margin-left: -10px;
+  margin-right: 5px;
+}
+
+.point:hover {
+  cursor: auto;;
 }
 
 .point.out {
   position : absolute;
-  margin-left: 40px;
-  top: 20px;
+  margin-left: 90px;
+  margin-bottom: 0px;
+  margin-top: -11px;
+  top: 50%;
+}
+
+.valueinput {
+  width: 95%;
+  font-size: 10px;
+  height: 20px;
+  margin-left: 10px;
 }
 
 .draggable .label {
@@ -117,44 +165,4 @@ body {
   border: 1px solid black;
   height: 0px;
   position: absolute;
-}
-
-#modale {
-  display: none;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-}
-
-label {
-  cursor: pointer;
-}
-
-.labelButton {
-  border: 1px solid black;
-  padding: 5px 10px;
-  background-color: white;
-  position: absolute;
-  top: 25%;
-  left: 50px;
-}
-
-.popupblock{
-  background: #fff;
-  padding: 20px;
-  border: 20px solid #ddd;
-  position: relative;
-  margin: 10% auto;
-  width: 40%;
-  box-shadow: 0px 0px 20px #000;
-  border-radius: 10px;
-}
-
-img.my_btn_close {
-  float: right;
-  margin: -55px -55px 0 0;
 }

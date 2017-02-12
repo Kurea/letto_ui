@@ -1,26 +1,13 @@
-const SUPPORTED_COMPARISON_TYPES = ["string_comparison","regex_comparison"];
-const SUPPORTED_FUNCTION_NAMES = ["add","api_call","map","min","convert","extract","get_linkedin_photo","gsub"];
-const EXPECTED_ARGS = {
-  "add": ["*+"],
-  "api_call": ["expression","expression","[payload]"],
-  "map": ["*","*"],
-  "min": ["*+"],
-  "convert": ["expression","*"],
-  "extract": ["expression","*"],
-  "get_linkedin_photo": ["*"],
-  "gsub": ["*","expression","expression","expression"]
-}
-
 class Menu {
   constructor(container) {
-    this.addfunctions(container);
+    this.addFunctions(container, SUPPORTED_TYPES);
   }
 
   // add a function to the menu
   // type is dt or dd
   // name is the display name
   // event Listener optional to add an eventlistener
-  addfunction(container, fntype, functionName, eventListener) {
+  addFunctionToMenu(container, fntype, functionName, eventListener) {
     var fn = container.ownerDocument.createElement(fntype);
     fn.innerHTML = functionName;
     container.appendChild(fn);
@@ -29,43 +16,32 @@ class Menu {
     }
   }
 
-  // add all dunctions to the menu
-  addfunctions(container) {
-    this.addfunction(container, 'dd', 'expression', this.addExpressionModule);
-
-    this.addfunction(container, 'dt', 'Comparison');
-    for (var i = 0, ln = SUPPORTED_COMPARISON_TYPES.length; i<ln; i++) {
-      this.addfunction(container, 'dd', SUPPORTED_COMPARISON_TYPES[i], this.addComparisonModule);
+  // add all functions to the menu
+  addFunctions(container, table) {
+    var i, ln = table.length;
+    var object_name;
+    for(i = 0; i < ln; i++) {
+      object_name = table[i]
+      // if arguments are described, it is a handle
+      if (EXPECTED_HANDLE_ARGS[object_name]) {
+        this.addFunctionToMenu(container, 'dd', object_name, this.addModuleOnMenuClick);
+      }
+      else { // it is a category
+        this.addFunctionToMenu(container, 'dt', object_name);
+        // add all handler of this category
+        this.addFunctions(container, SUPPORTED_CATEGORY_TYPES[object_name])
+      }
     }
-
-    this.addfunction(container, 'dt', 'Operations');
-    for (var i = 0, ln = SUPPORTED_FUNCTION_NAMES.length; i<ln; i++) {
-      this.addfunction(container, 'dd', SUPPORTED_FUNCTION_NAMES[i], this.addOperationModule);
-    }
-
   }
 
   // add a module to the board
-  static addModule(name, inputs) {
+  static addModule(name, style) {
     var zone = document.querySelector('.zone');
-    return new Handle(zone, name, inputs);
-  }
+    return new Handle(zone, name, EXPECTED_HANDLE_ARGS[name], style);
+  };
 
-  // add an expression handle to the board
-  addExpressionModule(e) {
-    Menu.addModule("expression", []);
-  }
-
-  // add an operation handle to the board
-  addOperationModule(e) {
-    var moduleToAdd = e.target.innerHTML;
-    var args = EXPECTED_ARGS[moduleToAdd];
-    Menu.addModule( moduleToAdd, args);
-  }
-
-  // add a comparisonModule to the board
-  addComparisonModule(e) {
-    var moduleToAdd = e.target.innerHTML;
-    Menu.addModule(moduleToAdd, ["*","*"]);
+  addModuleOnMenuClick(e) {
+    var name = e.target.innerHTML;
+    Menu.addModule(name);
   }
 }

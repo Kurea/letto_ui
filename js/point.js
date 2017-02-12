@@ -1,16 +1,29 @@
 class Point {
-  constructor(container, handle, type, acceptMultipleConnections) {
+  constructor(container, handle, type, name, acceptMultipleConnections) {
     this.type = type;
+    this.name = name;
     this.acceptMultipleConnections = acceptMultipleConnections;
     this.lines = [];
     // create new div
     this.elem = container.ownerDocument.createElement('div');
-    this.elem.className = "point";
     if (type == "out") {
+      this.elem.className = "point";
       this.elem.className += " out";
+      this.point = this.elem;
     }
-    this.elem.addEventListener("mousedown", CurrentLine.startLine, false);
-    this.elem.jsObject = this;
+    else {
+      this.elem.className = "input";
+      var point = container.ownerDocument.createElement('p');
+      point.className = "point";
+      this.point = point;
+      var label = container.ownerDocument.createElement('p');
+      label.className = "inputlabel";
+      label.innerHTML = this.name;
+      this.elem.appendChild(point);
+      this.elem.appendChild(label);
+    }
+    this.point.addEventListener("mousedown", CurrentLine.startLine, false);
+    this.point.jsObject = this;
     // add to document
     container.appendChild(this.elem);
 
@@ -23,19 +36,19 @@ class Point {
 
   // get the x coordinate of the center of the point
   getX() {
-    var rectPoint = this.elem.getBoundingClientRect();
+    var rectPoint = this.point.getBoundingClientRect();
     return rectPoint.left + ( ( rectPoint.right - rectPoint.left ) / 2 );;
   }
 
   // get the y coordinate of the center of the point
   getY() {
-    var rectPoint = this.elem.getBoundingClientRect();
+    var rectPoint = this.point.getBoundingClientRect();
     return rectPoint.top + ( ( rectPoint.bottom - rectPoint.top ) / 2 );
   }
 
   // return true if the elem is located in the point
   contains(elem) {
-    var rectPoint = this.elem.getBoundingClientRect();
+    var rectPoint = this.point.getBoundingClientRect();
     return (elem.x <= rectPoint.right) && (elem.x >= rectPoint.left) && (elem.y <= rectPoint.bottom) && (elem.y >= rectPoint.top);
   }
 
@@ -44,7 +57,7 @@ class Point {
     // remove attached lines
     //Line.each("deleteWithPoint", this);
     var i;
-    for (i=0; i<this.lines.length; i++) {
+    for (i=this.lines.length - 1; i >= 0; i--) {
       this.lines[i].delete();
     }
     // remove from DOM

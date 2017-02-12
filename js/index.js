@@ -6,10 +6,6 @@ window.onload = function() {
 
   var moduleslist = document.querySelector('.moduleslist > dl');
   new Menu(moduleslist);
+  clearZone();
 
-  document.querySelector('.my_btn_close').addEventListener("click", function(e) {
-    document.querySelector('#modale').style.display = 'none';
-    document.querySelector('#deletemodule').onclick = function(e) {  };
-    Handle.currentHandle = null;
-  });
 }

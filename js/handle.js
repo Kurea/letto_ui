@@ -1,15 +1,27 @@
 class Handle {
-  constructor(container, name, inPoints) {
+  constructor(container, name, args, style) {
     this.name = name;
+    this.args = args;
 
     // create new draggable div
     this.elem = container.ownerDocument.createElement('div');
     this.elem.className = "draggable";
+    this.elem.style = style;
 
-    // create the handle div
-    var h = container.ownerDocument.createElement('div');
-    h.className = "handle"
-    this.elem.appendChild(h);
+    // create delete button
+    if (this.name != "workflow") {
+      var btnDelete = container.ownerDocument.createElement('img');
+      btnDelete.className = "btndelete";
+      btnDelete.src = "./images/close_pop.png";
+      btnDelete.width = 20;
+      btnDelete.height = 20;
+      btnDelete.onclick = function(e) {
+        if (confirm ("Vous allez supprimer ce module")){
+          e.target.parentNode.jsObject.delete();
+        }
+      };
+      this.elem.appendChild(btnDelete);
+    }
 
     // create text
     var p = container.ownerDocument.createElement('p');
@@ -22,7 +34,7 @@ class Handle {
 
     // make the handle draggable
     var draggie = new Draggabilly( this.elem, {
-      handle: '.handle',
+      //handle: '.handle',
       containment: '.zone'
     });
 
@@ -33,32 +45,30 @@ class Handle {
       Line.each("updateWithDraggie", event.target.parentNode);
     });
 
-    draggie.on( 'staticClick', function(event, pointer) {
-      document.querySelector('#modale').style.display = 'block';
-      document.querySelector('#modulename').innerHTML = event.target.parentNode.jsObject.name;
-      document.querySelector('#modulecontent').innerHTML = event.target.parentNode.jsObject.inPoints;
-      // TODO : display param names and values
-      Handle.currentHandle = event.target.parentNode.jsObject;
-      document.querySelector('#deletemodule').onclick = function(e) {
-        document.querySelector('#modale').style.display = 'none';
-        Handle.currentHandle.delete();
-        Handle.currentHandle = null;
-      };
-    });
+    var inputIndxStart = 0;
+    if (this.name == "workflow" || this.name == "value") {
+      // replace input point with a field
+      this.inputField = container.ownerDocument.createElement('input');
+      this.inputField.className = "inputfield";
+      this.inputField.type = "text";
+      this.elem.appendChild(this.inputField);
+      inputIndxStart = 1;
+    }
 
     // create the inputs points and save refs to them
     this.in = [];
-    this.inPoints = inPoints;
+    var inPoints = args["inputs"];
     var acceptMultipleConnections;
-    for (var i=0; i<inPoints.length; i++) {
-      acceptMultipleConnections = (inPoints[i].slice(-1) == "+");
-      this.in.push(new Point(this.elem, this, "in", acceptMultipleConnections));
+    for (var i=inputIndxStart; i<inPoints.length; i++) {
+      acceptMultipleConnections = (inPoints[i].slice(-4) == " (+)");
+      this.in.push(new Point(this.elem, this, "in", inPoints[i], acceptMultipleConnections));
     }
 
-    this.out = new Point(this.elem, this, "out");
+    if (this.name !== "workflow") this.out = new Point(this.elem, this, "out");
 
     // save ref to this js object in the dom elem
     this.elem.jsObject = this;
+
     // update config
 
     Handle.all.push(this);
@@ -77,10 +87,12 @@ class Handle {
   // delte the current handle
   delete() {
     // delte output point
-    this.out.delete();
-    // delte input points
-    for(var i=0, ln = this.in.length; i<ln; i++) {
-      this.in[i].delete();
+    if (this.out) this.out.delete();
+    if (this.in){
+      // delte input points
+      for(var i=this.in.length-1; i>=0; i--) {
+        this.in[i].delete();
+      }
     }
     // remove child from DOM
     this.elem.remove();
@@ -90,15 +102,64 @@ class Handle {
     Handle.all.splice(i, 1);
   }
 
-  hasNoOutput() {
-    if (this.out) {
-      return !this.out.hasLine();
+  serialize() {
+    var json = {};
+    json["type"] = this.args["type"];
+    if (this.args["name_arg"]) json[this.args["name_arg"]] = this.name;
+    var hashToComplete = json;
+    var jsonIndx = 0;
+    var ln = this.args["inputs"].length;
+    if (this.name == "workflow" || this.name == "value") {
+      // what if the value should be numeric ?
+      json[this.args["inputs"][jsonIndx]] = this.inputField.value;
+      ln = ln - 1;
+      jsonIndx++;
     }
-    return true;
+    else if (this.args["type"] == "operation") {
+      json["arguments"] = {};
+      hashToComplete = json["arguments"];
+    }
+    var i;
+    var otherSideHandles;
+    var j, ln2;
+    for (i = 0; i < ln; i++) {
+      otherSideHandles = this.getOtherSideHandles(this.in[i]);
+      ln2 = otherSideHandles.length;
+      if (ln2 == 0) {
+        hashToComplete[this.args["inputs"][jsonIndx]] = null;
+      }
+      else if (ln2 == 1) {
+        hashToComplete[this.args["inputs"][jsonIndx]] = otherSideHandles[0].serialize();
+      }
+      else {
+        // hash case to be completed
+        hashToComplete[this.args["inputs"][jsonIndx]] = [];
+        for (j = 0; j < ln2; j++) {
+          hashToComplete[this.args["inputs"][jsonIndx]].push(otherSideHandles[j].serialize());
+        }
+      }
+      jsonIndx++;
+    }
+    return json;
   }
 
   getOtherSideHandles(input) {
-    return this.in[input].getOtherSideHandles();
+    return input.getOtherSideHandles();
+  }
+
+  setInputField(value) {
+    if(this.inputField) {this.inputField.value = value;}
+  }
+
+  setStyle(style) {
+    var i;
+    var prop, val;
+    var regex, cssString;
+    for (i in style) {
+      prop = i;
+      val = style[i];
+      this.elem.style[prop] = val;
+    }
   }
 
   // execute fn function on each elem

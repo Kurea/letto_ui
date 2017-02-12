@@ -5,7 +5,7 @@ class Line {
     this.elem.className = "line";
     this.elem.jsObject = this;
     // update config
-    container.querySelector(".zone").appendChild(this.elem);
+    container.querySelector('.zone').appendChild(this.elem);
     Line.all.push(this);
 
     // start the line from startPoint
