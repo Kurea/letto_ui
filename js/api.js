@@ -146,5 +146,126 @@ const WF = {
         ]
       }
     }
+  },
+  "action": {
+    "type": "operation",
+    "function": "api_call",
+    "arguments": {
+      "verb": {
+        "type": "expression",
+        "value_type": "value",
+        "value": "PUT"
+      },
+      "target": {
+        "type": "expression",
+        "value_type": "value",
+        "value": "/cards/{{ action.data.card.id }}"
+      },
+      "payload": {
+        "type": "expression",
+        "value_type": "hash",
+        "value": {
+          "due": {
+            "type": "operation",
+            "function": "sum",
+            "arguments": {
+              "values": {
+                "type": "expression",
+                "value_type": "array",
+                "value": [
+                  {
+                    "type": "operation",
+                    "function": "convert",
+                    "arguments": {
+                      "value": {
+                        "type": "expression",
+                        "value_type": "value",
+                        "value": "{{ action.date }}"
+                      },
+                      "target_type": {
+                        "type": "expression",
+                        "value_type": "value",
+                        "value": "DateTime"
+                      }
+                    }
+                  },
+                  {
+                    "type": "operation",
+                    "function": "min",
+                    "arguments": {
+                      "values" : {
+                        "type": "expression",
+                        "value_type": "array",
+                        "value": [
+                          {
+                            "type": "operation",
+                            "function": "map",
+                            "arguments": {
+                              "mapping_table": {
+                                "type": "expression",
+                                "value_type": "hash",
+                                "value": {
+                                  "active contact": {
+                                    "type": "expression",
+                                    "value_type": "value",
+                                    "value": 30
+                                  },
+                                  "passive contact": {
+                                    "type": "expression",
+                                    "value_type": "value",
+                                    "value": 60
+                                  },
+                                  "Action to take": {
+                                    "type": "expression",
+                                    "value_type": "value",
+                                    "value": 7
+                                  }
+                                }
+                              },
+                              "values": {
+                                "type": "operation",
+                                "function": "extract",
+                                "arguments": {
+                                  "path": {
+                                    "type": "expression",
+                                    "value_type": "value",
+                                    "value": "name"
+                                  },
+                                  "data": {
+                                    "type": "operation",
+                                    "function": "api_call",
+                                    "arguments": {
+                                      "type": "expression",
+                                      "value_type": "hash",
+                                      "value": {
+                                        "verb": {
+                                          "type": "expression",
+                                          "value_type": "value",
+                                          "value": "GET"
+                                        },
+                                        "target": {
+                                          "type": "expression",
+                                          "value_type": "value",
+                                          "value": "/cards/{{ action.data.card.id }}/labels"
+                                        },
+                                        "payload": null
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
