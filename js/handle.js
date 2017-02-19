@@ -39,10 +39,23 @@ class Handle {
     });
 
     // make the lines to update with the hanlce
-    // TODO : update only the lines connected to the handle
     draggie.on('dragMove', function( event, pointer, moveVector ){
       // todo for all lines
-      Line.each("updateWithDraggie", event.target.parentNode);
+      /*var jsObject;
+      var target = event.target;
+      while (target && !target.jsObject) {
+        target = target.parentNode;
+      }
+      if (target && target.jsObject && target.jsObject instanceof Handle) {
+        jsObject = target.jsObject;
+        var lines = jsObject.getConnectedLines();
+        var i;
+        var ln = lines.length;
+        for (i=0; i < ln; i++) {
+          lines[i].updateWithDraggie();
+        }
+      }*/
+      Line.each("updateWithDraggie");
     });
 
     var inputIndxStart = 0;
@@ -149,6 +162,27 @@ class Handle {
 
   setInputField(value) {
     if(this.inputField) {this.inputField.value = value;}
+  }
+
+  getConnectedLines() {
+    var lines = [];
+    if (this.in) {
+      var i, ln = this.in.length;
+      var j, ln2;
+      for (i = 0; i < ln; i++) {
+        ln2 = this.in[i].lines.length;
+        for (j = 0; j < ln2; j++) {
+          lines.push(this.in[i].lines[j]);
+        }
+      }
+    }
+    if (this.out) {
+      ln2 = this.out.lines.length;
+      for (j = 0; j < ln2; j++) {
+        lines.push(this.out.lines[j]);
+      }
+    }
+    return lines;
   }
 
   setStyle(style) {

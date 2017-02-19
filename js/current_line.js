@@ -12,7 +12,14 @@ class CurrentLine {
       // Update the line to follow the mouse when it is moving (if a line is in progress)
       document.onmousemove = function(e) {
         if (CurrentLine.currentLine) {
-          CurrentLine.currentLine.updateFromMouse(e.pageX, e.pageY);
+          var x, y;
+          var i = 0;
+          while(e.path[i].className != "zone") {
+            i = i + 1;
+          }
+          x = e.pageX - parseFloat(e.path[i].offsetLeft);
+          y = e.pageY - parseFloat(e.path[i].offsetTop);
+          CurrentLine.currentLine.updateFromMouse(x, y);
         }
       };
     }

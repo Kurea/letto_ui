@@ -47,10 +47,8 @@ class Line {
   }
 
   // update line with draggable objects
-  updateWithDraggie(draggie) {
-//    if (this.startPoint.handle.elem == draggie || this.endPoint.handle.elem == draggie) {
+  updateWithDraggie() {
       this.update();
-//    }
   }
 
   // update from mouse coordinates (so that the line follows the mouse)
