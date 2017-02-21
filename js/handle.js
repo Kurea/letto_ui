@@ -52,10 +52,10 @@ class Handle {
         var i;
         var ln = lines.length;
         for (i=0; i < ln; i++) {
-          lines[i].updateWithDraggie();
+          lines[i].update();
         }
       }*/
-      Line.each("updateWithDraggie");
+      Line.each("update"); // updating all lines is faster than selecting the lines to be updated
     });
 
     var inputIndxStart = 0;

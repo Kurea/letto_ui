@@ -46,11 +46,6 @@ class Line {
     this.updateElement(x, y, c, alpha);
   }
 
-  // update line with draggable objects
-  updateWithDraggie() {
-      this.update();
-  }
-
   // update from mouse coordinates (so that the line follows the mouse)
   updateFromMouse(x, y) {
     this.update(x, y);

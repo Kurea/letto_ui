@@ -36,20 +36,18 @@ class Point {
 
   // get the x coordinate of the center of the point
   getX() {
-    var offsetX = parseFloat(this.point.offsetLeft) + parseFloat(this.handle.elem.offsetLeft) ;
-    //var rectHandle = this.handle.elem.getBoundingClientRect();
-    //var offsetX = rectHandle.left - rectPoint.left;
-    //return rectPoint.left + ( ( rectPoint.right - rectPoint.left ) / 2 ) + offsetX;
-    return offsetX + 10;
+    var zoneElem = document.querySelector(".zone");
+    var zoneOffsetX = zoneElem.offsetLeft - zoneElem.scrollLeft;
+    var pointLeft = this.point.getBoundingClientRect().left;
+    return pointLeft - zoneOffsetX + 7;
   }
 
   // get the y coordinate of the center of the point
   getY() {
-    var offsetY = parseFloat(this.point.offsetTop)+ parseFloat(this.handle.elem.offsetTop);
-    //var rectHandle = this.handle.elem.getBoundingClientRect();
-    //var offsetY = rectHandle.top - rectPoint.top;
-    //return rectPoint.top + ( ( rectPoint.bottom - rectPoint.top ) / 2 ) + offsetY;
-    return offsetY + 10;
+    var zoneElem = document.querySelector(".zone");
+    var zoneOffsetY = zoneElem.offsetTop + zoneElem.scrollTop - window.scrollY;
+    var pointTop = this.point.getBoundingClientRect().top;
+    return pointTop - zoneOffsetY + 7;
   }
 
   // return true if the elem is located in the point
