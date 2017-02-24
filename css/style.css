@@ -170,3 +170,9 @@ body {
   height: 0px;
   position: absolute;
 }
+
+.limitpoint {
+  height: 1px;
+  width: 1px;
+  position: absolute;
+}

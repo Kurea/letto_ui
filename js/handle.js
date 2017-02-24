@@ -38,27 +38,54 @@ class Handle {
       containment: '.zone'
     });
 
-    // make the lines to update with the hanlce
+    // make the lines to update with the handle
     draggie.on('dragMove', function( event, pointer, moveVector ){
-      // todo for all lines
-      /*var jsObject;
-      var target = event.target;
-      while (target && !target.jsObject) {
-        target = target.parentNode;
+      var zone = document.querySelector(".zone");
+      var increment = 100;
+      var offsetWidth = zone.offsetWidth;
+      var offsetHeight = zone.offsetHeight;
+      var offsetLeft = zone.offsetLeft;
+      var offsetTop = zone.offsetTop;
+      var scrollLeft = zone.scrollLeft;
+      var scrollTop = zone.scrollTop;
+      // if draggie is near the border of zone --> replace the limit of zone
+      if(((offsetWidth + offsetLeft) < (event.x + 100)) && moveVector.x > 0){
+        // if right border, move the limit point
+        document.querySelector(".limitpoint").style.left = event.x - offsetLeft + scrollLeft + increment + "px";
+        zone.scrollLeft = scrollLeft + increment/10;
+        event.stopPropagation();
       }
-      if (target && target.jsObject && target.jsObject instanceof Handle) {
-        jsObject = target.jsObject;
-        var lines = jsObject.getConnectedLines();
-        var i;
-        var ln = lines.length;
-        for (i=0; i < ln; i++) {
-          lines[i].update();
+      if((offsetLeft + 100 > event.x) && moveVector.x < 0) {
+        if (scrollLeft < 100) {
+        // if left border, move all draggies right
+        Handle.each("addLeft", increment);
         }
-      }*/
+        else {
+          zone.scrollLeft = scrollLeft - increment/10;
+        }
+        event.stopPropagation();
+      }
+      if((offsetTop + 100 > event.y) && moveVector.y < 0) {
+        if (scrollTop < 100) {
+          // if top border, move all draggies bottom
+          Handle.each("addTop", increment);
+        }
+        else {
+          zone.scrollTop = scrollTop - increment/10;
+        }
+        event.stopPropagation();
+      }
+      if((offsetHeight + offsetTop) < (event.y + 100) && moveVector.y > 0){
+        // if bottom border, move limit point
+        document.querySelector(".limitpoint").style.top = event.y - offsetTop + scrollTop + increment + "px";
+        zone.scrollTop = scrollTop + increment/10;
+        event.stopPropagation();
+      }
       Line.each("update"); // updating all lines is faster than selecting the lines to be updated
     });
 
     var inputIndxStart = 0;
+    // if the block is a workflow or a value, first field is an input
     if (this.name == "workflow" || this.name == "value") {
       // replace input point with a field
       this.inputField = container.ownerDocument.createElement('input');
@@ -164,27 +191,6 @@ class Handle {
     if(this.inputField) {this.inputField.value = value;}
   }
 
-  getConnectedLines() {
-    var lines = [];
-    if (this.in) {
-      var i, ln = this.in.length;
-      var j, ln2;
-      for (i = 0; i < ln; i++) {
-        ln2 = this.in[i].lines.length;
-        for (j = 0; j < ln2; j++) {
-          lines.push(this.in[i].lines[j]);
-        }
-      }
-    }
-    if (this.out) {
-      ln2 = this.out.lines.length;
-      for (j = 0; j < ln2; j++) {
-        lines.push(this.out.lines[j]);
-      }
-    }
-    return lines;
-  }
-
   setStyle(style) {
     var i;
     var prop, val;
@@ -194,6 +200,14 @@ class Handle {
       val = style[i];
       this.elem.style[prop] = val;
     }
+  }
+
+  addLeft(nbpx) {
+    this.elem.style["left"] = parseFloat(this.elem.style["left"].replace("px", "")) + nbpx + "px";
+  }
+
+  addTop(nbpx) {
+    this.elem.style["top"] = parseFloat(this.elem.style["top"].replace("px", "")) + nbpx + "px";
   }
 
   // execute fn function on each elem

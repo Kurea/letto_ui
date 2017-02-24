@@ -1,5 +1,6 @@
 var clearZone = function() {
   Handle.each("delete");
+  document.querySelector(".limitpoint").style = {left: "1px", right: "1px"}
   addWorkflowBox();
 }
 
