@@ -17,18 +17,9 @@ class Point {
       this.elem.className = "input";
       this.point = container.ownerDocument.createElement('p');
       this.point.className = "point";
-      if (type == 'hash') {
-        this.label = container.ownerDocument.createElement('input');
-        this.label.className = "inputname";
-        this.label.type = "text";
-        this.label.value = this.name;
-        this.type = "in";
-      }
-      else {
-        this.label = container.ownerDocument.createElement('p');
-        this.label.className = "inputlabel";
-        this.label.innerHTML = this.name;
-      }
+      this.label = container.ownerDocument.createElement('p');
+      this.label.className = "inputlabel";
+      this.label.innerHTML = this.name;
       this.elem.appendChild(this.point);
       this.elem.appendChild(this.label);
     }

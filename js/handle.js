@@ -110,16 +110,18 @@ class Handle {
     }
 
     var type = "in";
-    if(this.name == "hash") {
-      type = 'hash';
-    }
     // create the inputs points and save refs to them
     this.in = [];
     var inPoints = args["inputs"];
     var acceptMultipleConnections;
     for (var i=inputIndxStart; i<inPoints.length; i++) {
       acceptMultipleConnections = (this.name == "hash" || this.name == "array");
-      this.in.push(new Point(this.elem, this, type, inPoints[i], acceptMultipleConnections));
+      if(this.name == "hash") {
+        this.in.push(new HashPoint(this.elem, this, type, inPoints[i], acceptMultipleConnections));
+      }
+      else {
+        this.in.push(new Point(this.elem, this, type, inPoints[i], acceptMultipleConnections));
+      }
     }
     // if this is not a workflow, add an output
     if (this.name !== "workflow") this.out = new Point(this.elem, this, "out", false);
