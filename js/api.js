@@ -21,12 +21,12 @@ const EXPECTED_HANDLE_ARGS = {
   "array": {
     "type": "expression",
     "name_arg" : "value_type",
-    "inputs" : ["value (+)"]
+    "inputs" : ["value"]
   },
   "hash": {
     "type": "expression",
     "name_arg" : "value_type",
-    "inputs" : ["value (+)"]
+    "inputs" : ["value"]
   },
   "api_call": {
     "type": "operation",

@@ -110,7 +110,6 @@ class Handle {
     }
 
     var type = "in";
-    // TODO : if this is a hash, replace simple inputs with an input field
     if(this.name == "hash") {
       type = 'hash';
     }
@@ -119,7 +118,7 @@ class Handle {
     var inPoints = args["inputs"];
     var acceptMultipleConnections;
     for (var i=inputIndxStart; i<inPoints.length; i++) {
-      acceptMultipleConnections = (inPoints[i].slice(-4) == " (+)");
+      acceptMultipleConnections = (this.name == "hash" || this.name == "array");
       this.in.push(new Point(this.elem, this, type, inPoints[i], acceptMultipleConnections));
     }
     // if this is not a workflow, add an output
@@ -181,21 +180,32 @@ class Handle {
     var i;
     var otherSideHandles;
     var j, ln2;
+    var inputName;
+    var hashKey;
     for (i = 0; i < ln; i++) {
+      inputName = this.args["inputs"][jsonIndx];
       otherSideHandles = this.getOtherSideHandles(this.in[i]);
       ln2 = otherSideHandles.length;
       if (ln2 == 0) {
-        hashToComplete[this.args["inputs"][jsonIndx]] = null;
+        hashToComplete[inputName] = null;
+      }
+      else if (this.name == "array") {
+        hashToComplete[inputName] = [];
+        for (j = 0; j < ln2; j++) {
+          hashToComplete[inputName].push(otherSideHandles[j].serialize());
+        }
+      }
+      else if (this.name == "hash") {
+        // hash case to be completed
+        hashToComplete[inputName] = {};
+        // TODO : get the name of the input in the hash
+        for (j = 0; j < ln2; j++) {
+          hashKey = this.in[i].label.value;
+          hashToComplete[inputName][hashKey] = (otherSideHandles[j].serialize());
+        }
       }
       else if (ln2 == 1) {
-        hashToComplete[this.args["inputs"][jsonIndx]] = otherSideHandles[0].serialize();
-      }
-      else {
-        // hash case to be completed
-        hashToComplete[this.args["inputs"][jsonIndx]] = [];
-        for (j = 0; j < ln2; j++) {
-          hashToComplete[this.args["inputs"][jsonIndx]].push(otherSideHandles[j].serialize());
-        }
+        hashToComplete[inputName] = otherSideHandles[0].serialize();
       }
       jsonIndx++;
     }

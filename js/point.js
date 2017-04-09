@@ -15,24 +15,22 @@ class Point {
     else {
       // if in add a label
       this.elem.className = "input";
-      var point = container.ownerDocument.createElement('p');
-      point.className = "point";
-      this.point = point;
-      var label;
+      this.point = container.ownerDocument.createElement('p');
+      this.point.className = "point";
       if (type == 'hash') {
-        label = container.ownerDocument.createElement('input');
-        label.className = "inputname";
-        label.type = "text";
-        label.value = this.name;
+        this.label = container.ownerDocument.createElement('input');
+        this.label.className = "inputname";
+        this.label.type = "text";
+        this.label.value = this.name;
         this.type = "in";
       }
       else {
-        label = container.ownerDocument.createElement('p');
-        label.className = "inputlabel";
-        label.innerHTML = this.name;
+        this.label = container.ownerDocument.createElement('p');
+        this.label.className = "inputlabel";
+        this.label.innerHTML = this.name;
       }
-      this.elem.appendChild(point);
-      this.elem.appendChild(label);
+      this.elem.appendChild(this.point);
+      this.elem.appendChild(this.label);
     }
 
     // create a line on click on the point

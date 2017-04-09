@@ -40,6 +40,9 @@ class Menu {
   // add a module to the board
   static addModule(name, style) {
     var zone = document.querySelector('.zone');
+    if (!style) {
+      style = "left:" + zone.scrollLeft + "px; top:" + zone.scrollTop + "px;";
+    }
     return new Handle(zone, name, EXPECTED_HANDLE_ARGS[name], style);
   };
 

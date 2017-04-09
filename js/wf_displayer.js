@@ -10,7 +10,7 @@ var addWorkflowBox = function () {
   var rpos = zspace.right - zspace.left - 105;
   // workflow shoud be in the middle of the zone
   var tpos = (zspace.bottom - zspace.top) / 2 - 50// add half the workflow box size
-  var style = "left:" + rpos + "px; top:" + tpos + "px;"
+  var style = "left:" + rpos + "px; top:" + tpos + "px;";
   Menu.addModule("workflow", style);
 }
 
@@ -136,8 +136,8 @@ var displayModule = function(wf, parent, inputn) {
     var i;
     var ln = inputs.length;
     for (i=startInx; i<ln; i++) {
-      if (inputs[i].slice(-4) == " (+)") {
-        var inputName = inputs[i].slice(0, -4);
+      if (name == "hash" || name == "array") {
+        var inputName = inputs[i]
         var j = 0;
         var k;
         var ln2 = args[inputName].length;

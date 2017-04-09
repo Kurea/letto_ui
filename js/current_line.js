@@ -17,8 +17,8 @@ class CurrentLine {
           while(e.path[i].className != "zone") {
             i = i + 1;
           }
-          x = e.pageX - parseFloat(e.path[i].offsetLeft);
-          y = e.pageY - parseFloat(e.path[i].offsetTop);
+          x = e.pageX - parseFloat(e.path[i].offsetLeft) + e.path[i].scrollLeft;
+          y = e.pageY - parseFloat(e.path[i].offsetTop) + e.path[i].scrollTop;
           CurrentLine.currentLine.updateFromMouse(x, y);
         }
       };
