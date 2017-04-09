@@ -1,6 +1,7 @@
 class Menu {
   constructor(container) {
     this.addFunctions(container, SUPPORTED_TYPES);
+
   }
 
   // add a function to the menu
@@ -23,13 +24,15 @@ class Menu {
     for(i = 0; i < ln; i++) {
       object_name = table[i]
       // if arguments are described, it is a handle
-      if (EXPECTED_HANDLE_ARGS[object_name]) {
-        this.addFunctionToMenu(container, 'dd', object_name, this.addModuleOnMenuClick);
+      if (SUPPORTED_TYPES.indexOf(object_name) !== -1) {
+        if (object_name !== "workflow") {
+          this.addFunctionToMenu(container, 'dt', object_name);
+          // add all handler of this category
+          this.addFunctions(container, SUPPORTED_CATEGORY_TYPES[object_name])
+        }
       }
       else { // it is a category
-        this.addFunctionToMenu(container, 'dt', object_name);
-        // add all handler of this category
-        this.addFunctions(container, SUPPORTED_CATEGORY_TYPES[object_name])
+        this.addFunctionToMenu(container, 'dd', object_name, this.addModuleOnMenuClick);
       }
     }
   }

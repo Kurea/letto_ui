@@ -8,7 +8,7 @@ class Handle {
     this.elem.className = "draggable";
     this.elem.style = style;
 
-    // create delete button
+    // create delete button if the block is not the workflow block
     if (this.name != "workflow") {
       var btnDelete = container.ownerDocument.createElement('img');
       btnDelete.className = "btndelete";
@@ -23,7 +23,7 @@ class Handle {
       this.elem.appendChild(btnDelete);
     }
 
-    // create text
+    // create lebel text
     var p = container.ownerDocument.createElement('p');
     p.className = "label"
     p.innerHTML = name;
@@ -33,13 +33,13 @@ class Handle {
     container.appendChild(this.elem);
 
     // make the handle draggable
-    var draggie = new Draggabilly( this.elem, {
+    this.draggie = new Draggabilly( this.elem, {
       //handle: '.handle',
       containment: '.zone'
     });
 
     // make the lines to update with the handle
-    draggie.on('dragMove', function( event, pointer, moveVector ){
+    this.draggie.on('pointerMove', function( event, pointer, moveVector ){
       var zone = document.querySelector(".zone");
       var increment = 100;
       var offsetWidth = zone.offsetWidth;
@@ -48,12 +48,21 @@ class Handle {
       var offsetTop = zone.offsetTop;
       var scrollLeft = zone.scrollLeft;
       var scrollTop = zone.scrollTop;
+      var target = event.target;
+      while(!target.jsObject && target.className !== "zone") {
+        target = target.parentNode;
+      }
       // if draggie is near the border of zone --> replace the limit of zone
       if(((offsetWidth + offsetLeft) < (event.x + 100)) && moveVector.x > 0){
         // if right border, move the limit point
         document.querySelector(".limitpoint").style.left = event.x - offsetLeft + scrollLeft + increment + "px";
         zone.scrollLeft = scrollLeft + increment/10;
-        event.stopPropagation();
+        if (target && target.jsObject) {
+          target.jsObject.draggie.dragPoint.x = target.jsObject.draggie.dragPoint.x + increment/10;
+          target.jsObject.draggie.positionDrag();
+          //target.jsObject.addLeft(increment/10);
+        }
+
       }
       if((offsetLeft + 100 > event.x) && moveVector.x < 0) {
         if (scrollLeft < 100) {
@@ -63,7 +72,6 @@ class Handle {
         else {
           zone.scrollLeft = scrollLeft - increment/10;
         }
-        event.stopPropagation();
       }
       if((offsetTop + 100 > event.y) && moveVector.y < 0) {
         if (scrollTop < 100) {
@@ -73,14 +81,20 @@ class Handle {
         else {
           zone.scrollTop = scrollTop - increment/10;
         }
-        event.stopPropagation();
       }
       if((offsetHeight + offsetTop) < (event.y + 100) && moveVector.y > 0){
         // if bottom border, move limit point
         document.querySelector(".limitpoint").style.top = event.y - offsetTop + scrollTop + increment + "px";
         zone.scrollTop = scrollTop + increment/10;
-        event.stopPropagation();
+        if (target && target.jsObject) {
+          target.jsObject.draggie.position.y = target.jsObject.draggie.position.y + increment/10;
+          target.jsObject.addTop(increment/10);
+        }
       }
+      Line.each("update"); // updating all lines is faster than selecting the lines to be updated
+    });
+
+    this.draggie.on('dragEnd', function( event, pointer ){
       Line.each("update"); // updating all lines is faster than selecting the lines to be updated
     });
 
@@ -95,16 +109,21 @@ class Handle {
       inputIndxStart = 1;
     }
 
+    var type = "in";
+    // TODO : if this is a hash, replace simple inputs with an input field
+    if(this.name == "hash") {
+      type = 'hash';
+    }
     // create the inputs points and save refs to them
     this.in = [];
     var inPoints = args["inputs"];
     var acceptMultipleConnections;
     for (var i=inputIndxStart; i<inPoints.length; i++) {
       acceptMultipleConnections = (inPoints[i].slice(-4) == " (+)");
-      this.in.push(new Point(this.elem, this, "in", inPoints[i], acceptMultipleConnections));
+      this.in.push(new Point(this.elem, this, type, inPoints[i], acceptMultipleConnections));
     }
-
-    if (this.name !== "workflow") this.out = new Point(this.elem, this, "out");
+    // if this is not a workflow, add an output
+    if (this.name !== "workflow") this.out = new Point(this.elem, this, "out", false);
 
     // save ref to this js object in the dom elem
     this.elem.jsObject = this;

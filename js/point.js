@@ -4,25 +4,41 @@ class Point {
     this.name = name;
     this.acceptMultipleConnections = acceptMultipleConnections;
     this.lines = [];
-    // create new div
+    // create new div containing the whole point object with label
     this.elem = container.ownerDocument.createElement('div');
     if (type == "out") {
+      // if out, simple point
       this.elem.className = "point";
       this.elem.className += " out";
       this.point = this.elem;
     }
     else {
+      // if in add a label
       this.elem.className = "input";
       var point = container.ownerDocument.createElement('p');
       point.className = "point";
       this.point = point;
-      var label = container.ownerDocument.createElement('p');
-      label.className = "inputlabel";
-      label.innerHTML = this.name;
+      var label;
+      if (type == 'hash') {
+        label = container.ownerDocument.createElement('input');
+        label.className = "inputname";
+        label.type = "text";
+        label.value = this.name;
+        this.type = "in";
+      }
+      else {
+        label = container.ownerDocument.createElement('p');
+        label.className = "inputlabel";
+        label.innerHTML = this.name;
+      }
       this.elem.appendChild(point);
       this.elem.appendChild(label);
     }
+
+    // create a line on click on the point
     this.point.addEventListener("mousedown", CurrentLine.startLine, false);
+
+
     this.point.jsObject = this;
     // add to document
     container.appendChild(this.elem);
@@ -45,7 +61,7 @@ class Point {
   // get the y coordinate of the center of the point
   getY() {
     var zoneElem = document.querySelector(".zone");
-    var zoneOffsetY = zoneElem.offsetTop + zoneElem.scrollTop - window.scrollY;
+    var zoneOffsetY = zoneElem.offsetTop - zoneElem.scrollTop;
     var pointTop = this.point.getBoundingClientRect().top;
     return pointTop - zoneOffsetY + 7;
   }
@@ -72,6 +88,7 @@ class Point {
     Point.all.splice(i, 1);
   }
 
+  // add a line to the point
   addLine(line) {
     if (this.lines.length == 0 || this.acceptMultipleConnections) {
       this.lines.push(line);
@@ -80,16 +97,19 @@ class Point {
     return false;
   }
 
+  // remove line from point
   removeLine(line) {
     var i = 0;
     while (this.lines[i] !== line) { i++; }
     this.lines.splice(i, 1);
   }
 
+  // return true if the point have at least one line
   hasLine() {
     return this.lines.length !== 0
   }
 
+  // get handles at the other side of lines
   getOtherSideHandles() {
     var ln = this.lines.length;
     var i;

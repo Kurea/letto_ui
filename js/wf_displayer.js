@@ -19,13 +19,16 @@ var makeBeautiful = function() {
   var lastModule = Handle.all[0];
   var colTlimit = [];
   colTlimit[0] = tlimit;
-  setPos(lastModule, 0, tlimit, colTlimit);
+  var lastModuleVPos = setPos(lastModule, 0, tlimit, colTlimit);
   setColPos(lastModule, 0, colTlimit);
   Line.each("update");
-  /*var lnoffset;
-  var tnoffset;
-  lnoffset = Math.max(loffset - 150, hlimit);
-  tnoffset = Math.min(toffset + (i*110), vlimit);*/
+  // position scroll on the workflow block
+  var zspace = document.querySelector('.zone');
+  var hScroll = Math.max(colTlimit.length * 130 - zspace.clientWidth, 0);
+  var lastModuleMiddle = lastModuleVPos["top"] + (lastModuleVPos["bottom"] - lastModuleVPos["top"]) / 2;
+  var vScroll = Math.max(lastModuleMiddle - zspace.clientHeight / 2, 0);
+  zspace.scrollTop = vScroll ;
+  zspace.scrollLeft = hScroll;
 }
 
 /*
@@ -41,43 +44,44 @@ var setPos = function(m, colNum, tlimit, colTlimit) {
   var zspace = m.elem.getBoundingClientRect();
   var height = zspace.bottom - zspace.top;
 
-  // calculate the vertical position : from parameter or bottom of the page
+  // calculate the vertical position : from parameter or bottom of the column
   var realtlimit = Math.max(tlimit - (height)/2, colTlimit[colNum]);
   // calculate the next column position
-  var newColNum = colNum + 1//Math.max(rlimit - 130, llimit);
-  // recurse on otherside Handles
+  var newColNum = colNum + 1
+  // init vars
   var otherSideHandles;
   var i, j;
   var ln = m.in.length, ln2;
-  var newTlimit = realtlimit - height;
-  var siblingVPos = {};
-  siblingVPos["bottom"] = colTlimit[newColNum] || 0;
+  var newTlimit = realtlimit; // input blocks are at least at actual top position
+  var inputsVPos = {};
+  inputsVPos["bottom"] = 0;
   var firstInputVPos;
+  // recurse on otherside Handles : nb of inputs
   for(i=0; i<ln; i++) {
-    // get the input blocks
+    // get the input blocks for each input
     otherSideHandles = m.getOtherSideHandles(m.in[i]);
     ln2 = otherSideHandles.length;
     for(j=0; j<ln2; j++) {
-      colTlimit[newColNum] = Math.max(colTlimit[newColNum] || 7, siblingVPos["bottom"]);
+      // inputs are positioned at 7 from top (first one) or below the previous one (last sibling or last in column)
+      colTlimit[newColNum] = Math.max(colTlimit[newColNum] || 7, inputsVPos["bottom"]);
       // recurse on input blocks
-      siblingVPos = setPos(otherSideHandles[j], newColNum, newTlimit, colTlimit);
+      inputsVPos = setPos(otherSideHandles[j], newColNum, newTlimit, colTlimit);
       // save the first vertical input
-      if (!firstInputVPos) firstInputVPos = siblingVPos["top"];
+      if (!firstInputVPos) firstInputVPos = inputsVPos["top"];
       // save the last vertical position in the column
-      colTlimit[newColNum] = siblingVPos["bottom"];
+      colTlimit[newColNum] = inputsVPos["bottom"];
     }
   }
-  // set vertical position of the block
+  // if block have inputs set and displayed
   if (ln > 0 && firstInputVPos) {
-    realtlimit = firstInputVPos + (colTlimit[newColNum] - firstInputVPos - height) / 2 - 10;
+    // top of first input + (height of all inputs - height of actual block) / 2 - 10
+    // center the current block in front of its inputs
+    realtlimit = firstInputVPos + (colTlimit[newColNum] - firstInputVPos - height) / 2 - 10/2;
+    // or display it at the bottom of its column (if lower)
     realtlimit = Math.max(realtlimit, colTlimit[colNum]);
   }
   // set the vertical position
   m.setStyle({"top": realtlimit + "px"});
-
-  // set the horizontal position
-  var colPos = colTlimit.length - colNum - 1;
-  m.setStyle({"left": colPos*130 + "px"});
 
   // return the bottom position of this block
   return {"top" : realtlimit, "bottom" : realtlimit + height + 10};
@@ -112,8 +116,8 @@ var displayWorkflow = function(wf) {
 
 var displayModule = function(wf, parent, inputn) {
   if (!wf) return;
-  var name = wf[NAME_FROM_TYPE[wf["type"]]];
-  var m = Menu.addModule(name);
+  var name = wf[NAME_FROM_TYPE[wf["type"]]]; // get the the field containing the name of the handle from its type
+  var m = Menu.addModule(name); // create handle
   // add line between modules
   if (parent) {
     var l = new Line(document);
@@ -122,11 +126,11 @@ var displayModule = function(wf, parent, inputn) {
   }
   // if there is arguments, add them
   var args = wf["arguments"] || wf;
-  var inputs = EXPECTED_HANDLE_ARGS[name]["inputs"];
+  var inputs = EXPECTED_HANDLE_ARGS[name]["inputs"]; // get the input names from the handle name
   if (inputs) {
     var startInx = 0;
     if (name == "workflow" || name == "value") {
-      m.setInputField(args[inputs[0]]);
+      m.setInputField(args[inputs[0]]); // get the value to complete the input field
       startInx = 1;
     }
     var i;
@@ -134,16 +138,20 @@ var displayModule = function(wf, parent, inputn) {
     for (i=startInx; i<ln; i++) {
       if (inputs[i].slice(-4) == " (+)") {
         var inputName = inputs[i].slice(0, -4);
-        var j;
+        var j = 0;
+        var k;
         var ln2 = args[inputName].length;
         if (ln2) {
+          // array
           for (j=0; j < ln2; j++) {
             displayModule(args[inputName][j], m, i - startInx);
           }
         }
         else {
-          for (j in args[inputName]) {
-            displayModule(args[inputName][j], m, i - startInx);
+          // hash
+          for (k in args[inputName]) {
+            // TODO : push the name in the inputfield
+            displayModule(args[inputName][k], m, i - startInx);
           }
         }
       }
@@ -158,10 +166,10 @@ var saveWorkflow = function() {
   // find the last handle, the one with no output connected
   var lastModule = Handle.all[0];
   if (lastModule) {
-    var json = JSON.stringify(lastModule.serialize());
-    console.log(json);
+    var json = lastModule.serialize();
   }
   else {
     alert("last module not found");
   }
+  return json;
 }

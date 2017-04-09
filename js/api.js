@@ -235,21 +235,17 @@ const WF = {
                                     "type": "operation",
                                     "function": "api_call",
                                     "arguments": {
-                                      "type": "expression",
-                                      "value_type": "hash",
-                                      "value": {
-                                        "verb": {
-                                          "type": "expression",
-                                          "value_type": "value",
-                                          "value": "GET"
-                                        },
-                                        "target": {
-                                          "type": "expression",
-                                          "value_type": "value",
-                                          "value": "/cards/{{ action.data.card.id }}/labels"
-                                        },
-                                        "payload": null
-                                      }
+                                      "verb": {
+                                        "type": "expression",
+                                        "value_type": "value",
+                                        "value": "GET"
+                                      },
+                                      "target": {
+                                        "type": "expression",
+                                        "value_type": "value",
+                                        "value": "/cards/{{ action.data.card.id }}/labels"
+                                      },
+                                      "payload": null
                                     }
                                   }
                                 }
