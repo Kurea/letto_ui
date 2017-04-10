@@ -79,7 +79,7 @@ class Line {
       this.update()
       // add event to remove line
       this.elem.onclick = function (e) {
-        if (confirm ('Vous allez supprimer cette ligne')){
+        if (confirm('Vous allez supprimer cette ligne')){
           this.jsObject.delete()
         }
       }

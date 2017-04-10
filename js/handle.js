@@ -13,10 +13,8 @@ class Handle {
       var btnDelete = container.ownerDocument.createElement('img')
       btnDelete.className = 'btndelete'
       btnDelete.src = './images/close_pop.png'
-      btnDelete.width = 20
-      btnDelete.height = 20
       btnDelete.onclick = function (e) {
-        if (confirm ('Vous allez supprimer ce module')) {
+        if (confirm('Vous allez supprimer ce module')) {
           e.target.parentNode.jsObject.delete()
         }
       }
