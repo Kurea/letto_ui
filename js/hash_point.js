@@ -1,4 +1,6 @@
-class HashPoint extends Point {
+import Point from 'point'
+
+export default class HashPoint extends Point {
   constructor (container, handle, type, name, acceptMultipleConnections) {
     super(container, handle, type, name, acceptMultipleConnections)
     this.elem.removeChild(this.label)

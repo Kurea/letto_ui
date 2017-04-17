@@ -1,4 +1,6 @@
-class CurrentLine {
+import Line from 'line'
+import Point from 'point'
+export default class CurrentLine {
   // start a new line
   static startLine (e) {
     e.stopPropagation() // still needed ?
@@ -22,7 +24,7 @@ class CurrentLine {
         }
       }
     }
-  };
+  }
 
   // stop the line, either by canceling it or by ending it
   static stopLine (e) {
@@ -40,7 +42,7 @@ class CurrentLine {
       }
       CurrentLine.removeEventAndRef()
     }
-  };
+  }
 
   static removeEventAndRef () {
     CurrentLine.currentLine = null

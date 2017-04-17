@@ -1,4 +1,5 @@
-class Line {
+import CurrentLine from 'current_line'
+export default class Line {
   constructor (container) {
     // create new div
     this.elem = container.createElement('div')

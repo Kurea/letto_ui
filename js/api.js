@@ -1,14 +1,14 @@
-const SUPPORTED_TYPES = ['workflow', 'expression', 'operation'] // workflow is a handle, expression is a category of supported values and operation a category of functions
-const SUPPORTED_CATEGORY_TYPES = {
+export const SUPPORTED_TYPES = ['workflow', 'expression', 'operation'] // workflow is a handle, expression is a category of supported values and operation a category of functions
+export const SUPPORTED_CATEGORY_TYPES = {
   'expression': ['value', 'array', 'hash'],
   'operation': ['api_call', 'boolean', 'compare', 'convert', 'extract', 'map', 'min', 'replace_pattern', 'sum']
 }
-const NAME_FROM_TYPE = {
+export const NAME_FROM_TYPE = {
   'workflow': 'type',
   'expression': 'value_type',
   'operation': 'function'
 }
-const EXPECTED_HANDLE_ARGS = {
+export const EXPECTED_HANDLE_ARGS = {
   'workflow': {
     'type': 'workflow',
     'inputs': ['name', 'condition', 'action']
@@ -74,7 +74,7 @@ const EXPECTED_HANDLE_ARGS = {
     'inputs': ['values']
   }
 }
-const WF = {
+export const WF = {
   'name': 'setDueDateOnLabelChange',
   'type': 'workflow',
   'condition': {

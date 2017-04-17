@@ -1,4 +1,8 @@
-class Handle {
+import Point from 'point'
+import Draggabilly from 'lib/dragabilly'
+import Line from 'line'
+import HashPoint from 'hash_point'
+export default class Handle {
   constructor (container, name, args, style) {
     this.name = name
     this.args = args
@@ -236,7 +240,7 @@ class Handle {
     for (var i = l; i > 0; i--) {
       Handle.all[i - 1][fn](arg)
     }
-  };
+  }
 
   // return the first point for wich le fn function return true
   static firstTo (fn, arg) {

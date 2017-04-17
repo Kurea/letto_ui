@@ -1,4 +1,6 @@
-class Menu {
+import { SUPPORTED_TYPES, SUPPORTED_CATEGORY_TYPES, EXPECTED_HANDLE_ARGS } from 'api'
+import Handle from 'handle'
+export default class Menu {
   constructor (container) {
     this.addFunctions(container, SUPPORTED_TYPES)
   }
@@ -43,7 +45,7 @@ class Menu {
       style = 'left:' + zone.scrollLeft + 'px; top:' + zone.scrollTop + 'px;'
     }
     return new Handle(zone, name, EXPECTED_HANDLE_ARGS[name], style)
-  };
+  }
 
   addModuleOnMenuClick (e) {
     var name = e.target.innerHTML

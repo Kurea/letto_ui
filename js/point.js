@@ -1,4 +1,5 @@
-class Point {
+import CurrentLine from 'current_line'
+export default class Point {
   constructor (container, handle, type, name, acceptMultipleConnections) {
     this.type = type
     this.name = name
@@ -113,7 +114,7 @@ class Point {
     for (var i = l; i > 0; i--) {
       Point.all[i - 1][fn](arg)
     }
-  };
+  }
 
   // return the first point for wich le fn function return true
   static firstTo (fn, arg) {
@@ -123,7 +124,7 @@ class Point {
         return Point.all[i]
       }
     }
-  };
+  }
 }
 
 Point.all = []

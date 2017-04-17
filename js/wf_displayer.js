@@ -1,4 +1,8 @@
-var clearZone = function () {
+import Handle from 'handle'
+import Menu from 'menu'
+import Line from 'line'
+import { NAME_FROM_TYPE, EXPECTED_HANDLE_ARGS } from 'api'
+export var clearZone = function () {
   Handle.each('delete')
   document.querySelector('.limitpoint').style = {left: '1px', right: '1px'}
   addWorkflowBox()
@@ -108,7 +112,7 @@ var setColPos = function (m, colNum, colTlimit) {
   }
 }
 
-var displayWorkflow = function (wf) {
+export var displayWorkflow = function (wf) {
   Handle.each('delete')
   displayModule(wf)
   makeBeautiful()
@@ -161,7 +165,7 @@ var displayModule = function (wf, parent, inputn) {
   }
 }
 
-var saveWorkflow = function () {
+export var saveWorkflow = function () {
   // find the last handle, the one with no output connected
   var lastModule = Handle.all[0]
   if (lastModule) {
