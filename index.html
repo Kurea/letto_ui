@@ -2,23 +2,14 @@
 <html >
 <head>
   <meta charset='UTF-8'>
-  <title>Draggabilly</title>
+  <title>Letto</title>
   <meta name='viewport' content='width=device-width'>
-  <script src='js/api.js'></script>
-  <script src='js/lib/draggabilly.pkgd.js'></script>
-  <script src='js/current_line.js'></script>
-  <script src='js/menu.js'></script>
-  <script src='js/point.js'></script>
-  <script src='js/hash_point.js'></script>
-  <script src='js/line.js'></script>
-  <script src='js/handle.js'></script>
-  <script src='js/index.js'></script>
-  <script src='js/wf_displayer.js'></script>
+  <script src='js/bundle.js'></script>
   <link rel='stylesheet' href='css/style.css'>
 </head>
 
 <body>
-  <h1>Draggabilly</h1>
+  <h1>Letto</h1>
   <div class = 'content'>
     <div class = 'moduleslist'>
       <dl></dl>
@@ -27,8 +18,8 @@
       <div class = 'limitpoint'></div>
     </div>
   </div>
-  <button onclick='displayWorkflow(WF)'>Display Workflow</button>
-  <button onclick='clearZone()'>Clear Zone</button>
+  <button id='dispwf'>Display Workflow</button>
+  <button id='clear'>Clear Zone</button>
 </div>
 </body>
 </html>

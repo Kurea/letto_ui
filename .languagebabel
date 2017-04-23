@@ -1,0 +1,9 @@
+{
+  "babelSourcePath":                  "js/src",
+  "babelTranspilePath":               "js",
+  "createTranspiledCode":             false,
+  "disableWhenNoBabelrcFileInPath":   true,
+  "projectRoot":                      true,
+  "transpileOnSave":                  true,
+  "suppressTranspileOnSaveMessages":  true
+}

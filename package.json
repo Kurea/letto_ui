@@ -1,0 +1,31 @@
+{
+  "name": "Letto_ui",
+  "version": "0.0.1",
+  "description": "UI for letto",
+  "author": "Claire",
+  "private": true,
+  "dependencies": {
+    "draggabilly": "2.1.1",
+    "requirejs": "^2.3.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-preset-env": "^1.4.0",
+    "babelify": "^7.3.0",
+    "browserify": "^14.3.0",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-config-standard-react": "^4.3.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-react": "^6.10.3",
+    "eslint-plugin-standard": "^3.0.1",
+    "uglify": "^0.1.5"
+  },
+  "scripts": {
+    "build": "browserify js/src/*.js --debug -t babelify --outfile js/bundle.js",
+    "build-prod": "browserify js/src/*.js -t babelify | uglifyjs > js/bundle.js"
+  },
+  "main": "index.html"
+}
