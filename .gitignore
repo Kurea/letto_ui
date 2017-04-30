@@ -2,6 +2,7 @@
 /.env.production
 /*.DS_Store
 /.tags
+/.on-save.json
 /coverage
 /node_modules/*
-/js/bundle.js
+/js/*

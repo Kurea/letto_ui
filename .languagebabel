@@ -1,5 +1,5 @@
 {
-  "babelSourcePath":                  "js/src",
+  "babelSourcePath":                  "src",
   "babelTranspilePath":               "js",
   "createTranspiledCode":             false,
   "disableWhenNoBabelrcFileInPath":   true,

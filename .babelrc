@@ -1,7 +1,7 @@
 {
   "presets": ["env"],
   "ignore": [
-    "js/*.js",
+    "src/**/*.js",
     "node_modules/*"
   ]
 }

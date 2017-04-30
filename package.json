@@ -24,8 +24,8 @@
     "uglify": "^0.1.5"
   },
   "scripts": {
-    "build": "browserify js/src/*.js --debug -t babelify --outfile js/bundle.js",
-    "build-prod": "browserify js/src/*.js -t babelify | uglifyjs > js/bundle.js"
+    "build": "browserify src/index.js --debug -t babelify --outfile js/bundle.js",
+    "build-prod": "browserify src/index.js -t babelify | uglifyjs > js/bundle.js"
   },
   "main": "index.html"
 }
