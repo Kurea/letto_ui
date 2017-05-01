@@ -58,4 +58,20 @@ export default class HashHandle extends Handle {
       this.in.splice(id, 1);
     }
   }
+
+  serializeInput(i){
+    var hashKey;
+    var otherSideHandles;
+
+    // hash case to be completed
+    var values = {};
+    var inPoint;
+    for (inPoint of this.in) {
+      hashKey = inPoint.label.value;
+      otherSideHandles = this.getOtherSideHandles(inPoint);
+      values[hashKey] = (otherSideHandles[0].serialize());
+    }
+    return values;
+
+  }
 }

@@ -178,36 +178,31 @@ export default class Handle {
       hashToComplete = json['arguments'];
     }
     var i;
-    var otherSideHandles;
-    var j, ln2;
     var inputName;
-    var hashKey;
     for (i = 0; i < ln; i++) {
       inputName = this.args['inputs'][jsonIndx];
-      otherSideHandles = this.getOtherSideHandles(this.in[i]);
-      ln2 = otherSideHandles.length;
-      if (ln2 === 0) {
-        hashToComplete[inputName] = null;
-      } else if (this.name === 'array') {
-        hashToComplete[inputName] = [];
-        for (j = 0; j < ln2; j++) {
-          hashToComplete[inputName].push(otherSideHandles[j].serialize());
-        }
-      } else if (this.name === 'hash') {
-        // hash case to be completed
-        hashToComplete[inputName] = {};
-        var inPoint;
-        for (inPoint of this.in) {
-          hashKey = inPoint.label.value;
-          otherSideHandles = this.getOtherSideHandles(inPoint);
-          hashToComplete[inputName][hashKey] = (otherSideHandles[0].serialize());
-        }
-      } else if (ln2 === 1) {
-        hashToComplete[inputName] = otherSideHandles[0].serialize();
-      }
+      hashToComplete[inputName] = this.serializeInput(i);
       jsonIndx++;
     }
     return json;
+  }
+
+  serializeInput(i){
+    var j, ln2;
+    var otherSideHandles = this.getOtherSideHandles(this.in[i]);
+    ln2 = otherSideHandles.length;
+    if (ln2 === 0) {
+      return null;
+    } else if (this.name === 'array') {
+      var values = [];
+      for (j = 0; j < ln2; j++) {
+        values.push(otherSideHandles[j].serialize());
+      }
+      return values;
+    } else if (ln2 === 1) {
+      return otherSideHandles[0].serialize();
+    }
+
   }
 
   getOtherSideHandles (input) {
