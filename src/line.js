@@ -110,10 +110,10 @@ export default class Line {
   // }
 
   // execute the fn function on each lines
-  static each (fn, arg) {
+  static each (fn, ...arg) {
     var l = Line.all.length;
     for (var i = l; i > 0; i--) {
-      Line.all[i - 1][fn](arg);
+      Line.all[i - 1][fn](...arg);
     }
   }
 }

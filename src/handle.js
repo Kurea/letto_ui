@@ -232,18 +232,18 @@ export default class Handle {
   }
 
   // execute fn function on each elem
-  static each (fn, arg) {
+  static each (fn, ...arg) {
     var l = Handle.all.length;
     for (var i = l; i > 0; i--) {
-      Handle.all[i - 1][fn](arg);
+      Handle.all[i - 1][fn](...arg);
     }
   }
 
   // return the first point for wich le fn function return true
-  static firstTo (fn, arg) {
+  static firstTo (fn, args) {
     var l = Handle.all.length;
     for (var i = 0; i < l; i++) {
-      if (Handle.all[i][fn](arg)) {
+      if (Handle.all[i][fn](args)) {
         return Handle.all[i];
       }
     }
@@ -251,7 +251,7 @@ export default class Handle {
 
   static getDOM(target){
     var t = target;
-    while (t && t.className !== 'draggable') { t = t.parentNode; }
+    while (t && t.className && !t.className.includes('draggable')) { t = t.parentNode; }
     return t;
   }
 }
