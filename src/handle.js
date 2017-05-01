@@ -42,55 +42,52 @@ export default class Handle {
 
     // make the lines to update with the handle
     this.draggie.on('pointerMove', function (event, pointer, moveVector) {
-      /* var zone = document.querySelector('.zone')
-      var increment = 100
-      var offsetWidth = zone.offsetWidth
-      var offsetHeight = zone.offsetHeight
-      var offsetLeft = zone.offsetLeft
-      var offsetTop = zone.offsetTop
-      var scrollLeft = zone.scrollLeft
-      var scrollTop = zone.scrollTop
-      var target = event.target
-      while (!target.jsObject && target.className !== 'zone') {
-        target = target.parentNode
-      }
-      if (!target.jsObject) return
+      /*var zone = document.querySelector('.zone');
+      var increment = 100;
+      var offsetWidth = zone.offsetWidth;
+      var offsetHeight = zone.offsetHeight;
+      var offsetLeft = zone.offsetLeft;
+      var offsetTop = zone.offsetTop;
+      var scrollLeft = zone.scrollLeft;
+      var scrollTop = zone.scrollTop;
+      var target = Handle.getDOM(event.target);
+      if (!target) return;
       // if draggie is near the border of zone --> replace the limit of zone
       if (((offsetWidth + offsetLeft) < (event.x + 100)) && moveVector.x > 0) {
         // if right border, move the limit point
-        document.querySelector('.limitpoint').style.left = event.x - offsetLeft + scrollLeft + increment + 'px'
-        zone.scrollLeft = scrollLeft + increment / 10
+        document.querySelector('.limitpoint').style.left = event.x - offsetLeft + scrollLeft + increment + 'px';
+        zone.scrollLeft = scrollLeft + increment / 10;
         if (target && target.jsObject) {
-          target.jsObject.draggie.dragPoint.x = target.jsObject.draggie.dragPoint.x + increment / 10
-          target.jsObject.draggie.positionDrag()
-          // target.jsObject.addLeft(increment/10);
+          target.jsObject.draggie.dragPoint.x = target.jsObject.draggie.dragPoint.x + increment / 10;
+          target.jsObject.draggie.positionDrag();
+          // target.jsObject.addSpace('left', increment/10);
         }
       }
       if ((offsetLeft + 100 > event.x) && moveVector.x < 0) {
         if (scrollLeft < 100) {
         // if left border, move all draggies right
-          Handle.each('addLeft', increment)
+          Handle.each('addSpace', 'left', increment);
         } else {
-          zone.scrollLeft = scrollLeft - increment / 10
+          zone.scrollLeft = scrollLeft - increment / 10;
         }
       }
       if ((offsetTop + 100 > event.y) && moveVector.y < 0) {
         if (scrollTop < 100) {
           // if top border, move all draggies bottom
-          Handle.each('addTop', increment)
+          Handle.each('addSpace', 'top', increment);
         } else {
-          zone.scrollTop = scrollTop - increment / 10
+          zone.scrollTop = scrollTop - increment / 10;
         }
       }
       if ((offsetHeight + offsetTop) < (event.y + 100) && moveVector.y > 0) {
         // if bottom border, move limit point
-        document.querySelector('.limitpoint').style.top = event.y - offsetTop + scrollTop + increment + 'px'
-        zone.scrollTop = scrollTop + increment / 10
+        document.querySelector('.limitpoint').style.top = event.y - offsetTop + scrollTop + increment + 'px';
+        zone.scrollTop = scrollTop + increment / 10;
         if (target && target.jsObject) {
-          target.jsObject.draggie.position.y = target.jsObject.draggie.position.y + increment / 10
-          target.jsObject.addTop(increment / 10)
+          target.jsObject.draggie.position.y = target.jsObject.draggie.position.y + increment / 10;
+          target.jsObject.addSpace('top', increment / 10);
         }
-      } */
+      }*/
       Line.each('update'); // updating all lines is faster than selecting the lines to be updated
     });
 
@@ -223,12 +220,8 @@ export default class Handle {
     }
   }
 
-  addLeft (nbpx) {
-    this.elem.style['left'] = parseFloat(this.elem.style['left'].replace('px', '')) + nbpx + 'px';
-  }
-
-  addTop (nbpx) {
-    this.elem.style['top'] = parseFloat(this.elem.style['top'].replace('px', '')) + nbpx + 'px';
+  addSpace (pos, nbpx) {
+    this.elem.style[pos] = parseFloat(this.elem.style[pos].replace('px', '')) + nbpx + 'px';
   }
 
   // execute fn function on each elem
