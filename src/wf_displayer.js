@@ -154,9 +154,13 @@ function displayModule (wf, parent, inputn) {
           }
         } else {
           // hash
+          var id = 0;
+          m.removePointById(0);
           for (k in args[inputName]) {
             // TODO : push the name in the inputfield
-            displayModule(args[inputName][k], m, i - startInx);
+            m.addInputValue(k);
+            displayModule(args[inputName][k], m, id);
+            id = id + 1;
           }
         }
       } else {

@@ -1,8 +1,8 @@
 import CurrentLine from './current_line';
 import Menu from './menu';
-import {clearZone, displayWorkflow} from './wf_displayer';
+import {clearZone, displayWorkflow, saveWorkflow} from './wf_displayer';
 
-window.onload = function () {
+window.addEventListener('load', function () {
   // If mouse up event occurs anywhere, execute stopLine function
   document.addEventListener('mouseup', CurrentLine.stopLine, false);
 
@@ -12,4 +12,9 @@ window.onload = function () {
 
   document.getElementById('dispwf').addEventListener('click', displayWorkflow);
   document.getElementById('clear').addEventListener('click', clearZone);
+  document.getElementById('savewf').addEventListener('click', test);
+});
+
+var test = function() {
+  console.log(JSON.stringify(saveWorkflow()));
 };

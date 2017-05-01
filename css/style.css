@@ -180,3 +180,12 @@ body {
   width: 1px;
   position: absolute;
 }
+
+.btnremoveinput {
+  position: absolute;
+  left: 75px;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  cursor: auto;
+}

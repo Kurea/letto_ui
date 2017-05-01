@@ -1,7 +1,6 @@
 import Point from './point';
 import Draggabilly from 'draggabilly';
 import Line from './line';
-import HashPoint from './hash_point';
 
 export default class Handle {
   constructor (container, name, args, style) {
@@ -18,11 +17,11 @@ export default class Handle {
       var btnDelete = container.ownerDocument.createElement('img');
       btnDelete.className = 'btndelete';
       btnDelete.src = './images/close_pop.png';
-      btnDelete.onclick = function (e) {
+      btnDelete.addEventListener('click', function (e) {
         if (confirm('Vous allez supprimer ce module')) {
           e.target.parentNode.jsObject.delete();
         }
-      };
+      });
       this.elem.appendChild(btnDelete);
     }
 
@@ -43,7 +42,7 @@ export default class Handle {
 
     // make the lines to update with the handle
     this.draggie.on('pointerMove', function (event, pointer, moveVector) {
-      var zone = document.querySelector('.zone')
+      /* var zone = document.querySelector('.zone')
       var increment = 100
       var offsetWidth = zone.offsetWidth
       var offsetHeight = zone.offsetHeight
@@ -91,7 +90,7 @@ export default class Handle {
           target.jsObject.draggie.position.y = target.jsObject.draggie.position.y + increment / 10
           target.jsObject.addTop(increment / 10)
         }
-      }
+      } */
       Line.each('update'); // updating all lines is faster than selecting the lines to be updated
     });
 
@@ -114,14 +113,8 @@ export default class Handle {
     // create the inputs points and save refs to them
     this.in = [];
     var inPoints = args['inputs'];
-    var acceptMultipleConnections;
     for (var i = inputIndxStart; i < inPoints.length; i++) {
-      acceptMultipleConnections = (this.name === 'hash' || this.name === 'array');
-      if (this.name === 'hash') {
-        this.in.push(new HashPoint(this.elem, this, type, inPoints[i], acceptMultipleConnections));
-      } else {
-        this.in.push(new Point(this.elem, this, type, inPoints[i], acceptMultipleConnections));
-      }
+      this.createPoint(type, inPoints[i]);
     }
     // if this is not a workflow, add an output
     if (this.name !== 'workflow') this.out = new Point(this.elem, this, 'out', false);
@@ -132,6 +125,12 @@ export default class Handle {
     // update config
 
     Handle.all.push(this);
+  }
+
+  createPoint(type, inPoint) {
+    var acceptMultipleConnections;
+    acceptMultipleConnections = (this.name === 'array');
+    this.in.push(new Point(this.elem, this, type, inPoint, acceptMultipleConnections));
   }
 
   addEventListener (eventType, fn, disp) {
@@ -197,10 +196,11 @@ export default class Handle {
       } else if (this.name === 'hash') {
         // hash case to be completed
         hashToComplete[inputName] = {};
-        // TODO : get the name of the input in the hash
-        for (j = 0; j < ln2; j++) {
-          hashKey = this.in[i].label.value;
-          hashToComplete[inputName][hashKey] = (otherSideHandles[j].serialize());
+        var inPoint;
+        for (inPoint of this.in) {
+          hashKey = inPoint.label.value;
+          otherSideHandles = this.getOtherSideHandles(inPoint);
+          hashToComplete[inputName][hashKey] = (otherSideHandles[0].serialize());
         }
       } else if (ln2 === 1) {
         hashToComplete[inputName] = otherSideHandles[0].serialize();
@@ -252,6 +252,12 @@ export default class Handle {
         return Handle.all[i];
       }
     }
+  }
+
+  static getDOM(target){
+    var t = target;
+    while (t && t.className !== 'draggable') { t = t.parentNode; }
+    return t;
   }
 }
 

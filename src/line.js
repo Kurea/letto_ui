@@ -80,11 +80,11 @@ export default class Line {
       this.endPoint = point;
       this.update();
       // add event to remove line
-      this.elem.onclick = function (e) {
+      this.elem.addEventListener('click', function (e) {
         if (confirm('Vous allez supprimer cette ligne')){
           this.jsObject.delete();
         }
-      };
+      });
     } else {
       CurrentLine.removeEventAndRef();
       this.delete();
