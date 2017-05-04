@@ -25,7 +25,7 @@ export default class Handle {
       this.elem.appendChild(btnDelete);
     }
 
-    // create lebel text
+    // create label text
     var p = container.ownerDocument.createElement('p');
     p.className = 'label';
     p.innerHTML = name;
@@ -97,7 +97,7 @@ export default class Handle {
 
     var inputIndxStart = 0;
     // if the block is a workflow or a value, first field is an input
-    if (this.name === 'workflow' || this.name === 'value') {
+    if (this.name === 'workflow') {
       // replace input point with a field
       this.inputField = container.ownerDocument.createElement('input');
       this.inputField.className = 'inputfield';
@@ -106,13 +106,9 @@ export default class Handle {
       inputIndxStart = 1;
     }
 
-    var type = 'in';
-    // create the inputs points and save refs to them
-    this.in = [];
     var inPoints = args['inputs'];
-    for (var i = inputIndxStart; i < inPoints.length; i++) {
-      this.createPoint(type, inPoints[i]);
-    }
+    this.createInputs(inPoints, inputIndxStart);
+
     // if this is not a workflow, add an output
     if (this.name !== 'workflow') this.out = new Point(this.elem, this, 'out', false);
 
@@ -122,6 +118,15 @@ export default class Handle {
     // update config
 
     Handle.all.push(this);
+  }
+
+  createInputs(inPoints, inputIndxStart) {
+    var type = 'in';
+    // create the inputs points and save refs to them
+    this.in = [];
+    for (var i = inputIndxStart; i < inPoints.length; i++) {
+      this.createPoint(type, inPoints[i]);
+    }
   }
 
   createPoint(type, inPoint) {
@@ -165,8 +170,7 @@ export default class Handle {
     var hashToComplete = json;
     var jsonIndx = 0;
     var ln = this.args['inputs'].length;
-    if (this.name === 'workflow' || this.name === 'value') {
-      // what if the value should be numeric ?
+    if (this.name === 'workflow') {
       json[this.args['inputs'][jsonIndx]] = this.inputField.value;
       ln = ln - 1;
       jsonIndx++;

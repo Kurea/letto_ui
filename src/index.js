@@ -18,3 +18,9 @@ window.addEventListener('load', function () {
 var test = function() {
   console.log(JSON.stringify(saveWorkflow()));
 };
+
+Boolean.parse = function(val) {
+  if (/^(true|1)$/i.test(val)) return true;
+  if (/^(false|0)$/i.test(val)) return false;
+  return undefined;
+};

@@ -1,6 +1,7 @@
 import { SUPPORTED_TYPES, SUPPORTED_CATEGORY_TYPES, EXPECTED_HANDLE_ARGS } from './api';
 import Handle from './handle';
 import HashHandle from './hash_handle';
+import ValueHandle from './value_handle';
 
 export default class Menu {
   constructor (container) {
@@ -48,6 +49,8 @@ export default class Menu {
     }
     if (name === 'hash') {
       return new HashHandle(zone, name, EXPECTED_HANDLE_ARGS[name], style);
+    } else if (name === 'value') {
+      return new ValueHandle(zone, name, EXPECTED_HANDLE_ARGS[name], style);
     } else {
       return new Handle(zone, name, EXPECTED_HANDLE_ARGS[name], style);
     }

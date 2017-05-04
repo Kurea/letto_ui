@@ -137,6 +137,14 @@ body {
     margin-bottom: 2px;
 }
 
+.inputfield.error {
+  border-color: #a94442;
+}
+
+.inputfield.success {
+  border-color: #3c763d;
+}
+
 .point {
   background: #995C00;
   width: 20px;
