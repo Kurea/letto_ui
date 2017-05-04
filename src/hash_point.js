@@ -51,31 +51,32 @@ export default class HashPoint extends Point {
       this.btnRemove = this.elem.ownerDocument.createElement('img');
       this.btnRemove.className = 'btnremoveinput';
       this.btnRemove.src = './images/close_pop.png';
-      this.btnRemove.addEventListener('click', function (e) {
-        var handle = Handle.getDOM(e.target).jsObject;
-        var point = e.target.parentNode.firstChild.jsObject;
-        var prePointDOM = e.target.parentNode.previousSibling.firstChild;
-        if (confirm('Vous allez supprimer cette entrée')) {
-          handle.removePoint(point);
-          if (prePointDOM && prePointDOM.jsObject) {
-            prePointDOM.jsObject.label.focus();
-          } else if (handle.in[0]) {
-            handle.in[0].label.focus();
-          } else if (handle.tempInput) {
-            handle.tempInput.label.focus();
-          } else {
-            handle.addTempInput();
-            handle.tempInput.label.focus();
-          }
-        } else {
-          point.label.focus();
-        }
-      });
+      this.btnRemove.addEventListener('click', e => this.removeMe());
       this.elem.insertBefore(this.btnRemove, this.label);
     }
   }
 
   hasBtnRemove() {
     return (this.btnRemove !== undefined && this.btnRemove !== null);
+  }
+
+  removeMe() {
+    var handle = this.handle;
+    if (confirm('Vous allez supprimer cette entrée')) {
+      var pointI = handle.removePoint(this);
+      if (pointI > 0) {
+        handle.in[pointI - 1].label.focus();
+      } else if (handle.in[0]) {
+        handle.in[0].label.focus();
+      } else if (handle.tempInput) {
+        handle.tempInput.label.focus();
+      } else {
+        handle.addTempInput();
+        handle.tempInput.label.focus();
+      }
+    } else {
+      this.label.focus();
+    }
+
   }
 }

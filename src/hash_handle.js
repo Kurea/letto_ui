@@ -1,5 +1,6 @@
 import Handle from './handle';
 import HashPoint from './hash_point';
+import Line from './line';
 
 export default class HashHandle extends Handle {
   constructor (container, name, args, style) {
@@ -50,6 +51,8 @@ export default class HashHandle extends Handle {
     while (this.in[i] !== point) { i++; }
     this.in[i].delete();
     this.in.splice(i, 1);
+    Line.each('update');
+    return i;
   }
 
   removePointById(id) {
