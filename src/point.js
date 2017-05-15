@@ -29,6 +29,7 @@ export default class Point {
     this.point.addEventListener('mousedown', CurrentLine.startLine, false);
 
     this.point.jsObject = this;
+
     // add to document
     container.appendChild(this.elem);
 
@@ -96,6 +97,26 @@ export default class Point {
   // return true if the point have at least one line
   hasLine () {
     return this.lines.length !== 0;
+  }
+
+  // serialize this input information
+  serialize(){
+    var j, ln2;
+    var otherSideHandles = this.getOtherSideHandles();
+    ln2 = otherSideHandles.length;
+    if (ln2 === 0) {
+      // no line connected
+      return null;
+    } else if (this.acceptMultipleConnections) {
+      var values = [];
+      for (j = 0; j < ln2; j++) {
+        values.push(otherSideHandles[j].serialize());
+      }
+      return values;
+    } else if (ln2 === 1) {
+      return otherSideHandles[0].serialize();
+    }
+
   }
 
   // get handles at the other side of lines

@@ -19,7 +19,8 @@ function addWorkflowBox () {
   Menu.addModule('workflow', style);
 }
 
-function makeBeautiful () {
+// auto render the existing workflow
+export function makeBeautiful () {
   var tlimit = 7;
   var lastModule = Handle.all[0];
   var colTlimit = [];
@@ -65,7 +66,7 @@ function setPos (m, colNum, tlimit, colTlimit) {
   // recurse on otherside Handles : nb of inputs
   for (i = 0; i < ln; i++) {
     // get the input blocks for each input
-    otherSideHandles = m.getOtherSideHandles(m.in[i]);
+    otherSideHandles = m.in[i].getOtherSideHandles();
     ln2 = otherSideHandles.length;
     for (j = 0; j < ln2; j++) {
       // inputs are positioned at 7 from top (first one) or below the previous one (last sibling or last in column)
@@ -93,8 +94,8 @@ function setPos (m, colNum, tlimit, colTlimit) {
   return {'top': realtlimit, 'bottom': realtlimit + height + 10};
 }
 
+// set the horizontal position
 function setColPos (m, colNum, colTlimit) {
-  // set the horizontal position
   var colPos = colTlimit.length - colNum - 1;
   m.setStyle({'left': colPos * 130 + 'px'});
   var newColNum = colNum + 1;
@@ -104,7 +105,7 @@ function setColPos (m, colNum, colTlimit) {
   var otherSideHandles;
   for (i = 0; i < ln; i++) {
     // get the input blocks
-    otherSideHandles = m.getOtherSideHandles(m.in[i]);
+    otherSideHandles = m.in[i].getOtherSideHandles();
     ln2 = otherSideHandles.length;
     for (j = 0; j < ln2; j++) {
       // recurse on input blocks
@@ -113,6 +114,7 @@ function setColPos (m, colNum, colTlimit) {
   }
 }
 
+// display a workflow
 export function displayWorkflow () {
   Handle.each('delete');
   displayModule(WF);
@@ -169,6 +171,7 @@ function displayModule (wf, parent, inputn) {
   }
 }
 
+// serialize a workflow
 export function saveWorkflow () {
   // find the last handle, the one with no output connected
   var lastModule = Handle.all[0];

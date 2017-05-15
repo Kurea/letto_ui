@@ -1,5 +1,4 @@
 import Point from './point';
-import Handle from './handle';
 
 export default class HashPoint extends Point {
   constructor (container, handle, type, name, acceptMultipleConnections) {
@@ -8,37 +7,14 @@ export default class HashPoint extends Point {
     this.label = container.ownerDocument.createElement('input');
     this.label.className = 'inputname';
     this.label.type = 'text';
-    this.label.value = this.name;
     this.elem.appendChild(this.label);
 
-    this.label.addEventListener('focus', function (e) {
-      var handle = Handle.getDOM(e.target).jsObject;
-      handle.addAllBtnRemove();
-      if (handle.hasTempInput()) {
-        if (e.target.ownerDocument.activeElement === handle.tempInput.label) {
-          handle.tempInput.addBtnRemove();
-          handle.in.push(handle.tempInput);
-          handle.tempInput = null;
-        }
-      }
-      handle.addTempInput();
-    });
+    this.label.addEventListener('focus', e => this.handle.setUpdateMode());
 
-    this.label.addEventListener('blur', function (e) {
-      // to permit clicking on the other objects created
-      setTimeout(() => {
-        var handleDOM = Handle.getDOM(e.target);
-        var newActiveZone = Handle.getDOM(document.activeElement);
-        // if we left the hande
-        if (handleDOM && (handleDOM !== newActiveZone) && handleDOM.jsObject) {
-          var handle  = handleDOM.jsObject;
-          handle.removeAllBtnRemove();
-          handle.removeTempInput();
-        }
-      }, 125);
-    });
+    this.label.addEventListener('blur', e => this.handle.removeUpdateMode());
   }
 
+  //remove the remove button
   removeBtnRemove() {
     if(this.hasBtnRemove()) {
       this.label.previousSibling.remove();
@@ -46,6 +22,7 @@ export default class HashPoint extends Point {
     }
   }
 
+  //add the remove button
   addBtnRemove() {
     if (!this.hasBtnRemove()) {
       this.btnRemove = this.elem.ownerDocument.createElement('img');
@@ -56,10 +33,12 @@ export default class HashPoint extends Point {
     }
   }
 
+  //test if the remove button is present
   hasBtnRemove() {
     return (this.btnRemove !== undefined && this.btnRemove !== null);
   }
 
+  // remove this input
   removeMe() {
     var handle = this.handle;
     if (confirm('Vous allez supprimer cette entrée')) {
@@ -79,4 +58,13 @@ export default class HashPoint extends Point {
     }
 
   }
+
+  serialize(){
+    var values = {};
+    var hashKey = this.label.value;
+    var otherSideHandles = this.getOtherSideHandles();
+    values[hashKey] = (otherSideHandles[0].serialize());
+    return values;
+  }
+
 }

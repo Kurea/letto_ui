@@ -7,14 +7,44 @@ export default class HashHandle extends Handle {
     super(container, name, args, style);
   }
 
+  // create a point with type (in or out) and name
   createPoint(type, inPoint) {
     this.in.push(new HashPoint(this.elem, this, type, inPoint, true));
   }
 
+  // add a new input point
   addInputValue(value) {
     this.in.push(new HashPoint(this.elem, this, 'in', value, false));
   }
 
+  // set display to update mode  : add remove buttons and temp input
+  setUpdateMode() {
+    if (this.hasTempInput()) {
+      if (document.activeElement === this.tempInput.label) {
+        this.tempInput.addBtnRemove();
+        this.in.push(this.tempInput);
+        this.tempInput = null;
+        this.addTempInput();
+      }
+    } else {
+      this.addAllBtnRemove();
+      this.addTempInput();
+    }
+  }
+
+  // remove update mode : remove remove buttons and temp input
+  // (timeout to permit clicking on other handle elements)
+  removeUpdateMode() {
+    setTimeout(() => {
+      // if we left the hande
+      if (!this.elem.contains(document.activeElement)) {
+        this.removeAllBtnRemove();
+        this.removeTempInput();
+      }
+    }, 150);
+  }
+
+  // remove remove buttons on all inputs
   removeAllBtnRemove() {
     var point;
     for (point of this.in) {
@@ -22,6 +52,7 @@ export default class HashHandle extends Handle {
     }
   }
 
+  // add remove buttons on all inputs
   addAllBtnRemove() {
     var point;
     for (point of this.in) {
@@ -29,16 +60,19 @@ export default class HashHandle extends Handle {
     }
   }
 
+  // test if handle has a temp input
   hasTempInput(){
     return (this.tempInput !== undefined && this.tempInput !== null);
   }
 
+  // add the temp input
   addTempInput() {
     if(!this.hasTempInput()) {
       this.tempInput = new HashPoint(this.elem, this, 'in', '', false);
     }
   }
 
+  // remove the temp input
   removeTempInput() {
     if(this.hasTempInput()) {
       this.tempInput.delete();
@@ -46,6 +80,7 @@ export default class HashHandle extends Handle {
     }
   }
 
+  // remove designated input (DOM elem)
   removePoint(point) {
     var i = 0;
     while (this.in[i] !== point) { i++; }
@@ -55,6 +90,7 @@ export default class HashHandle extends Handle {
     return i;
   }
 
+  // remove designated input (input id)
   removePointById(id) {
     if (this.in[id]) {
       this.in[id].delete();
@@ -62,19 +98,17 @@ export default class HashHandle extends Handle {
     }
   }
 
-  serializeInput(i){
-    var hashKey;
-    var otherSideHandles;
-
-    // hash case to be completed
+  //serialize all inputs of the handle
+  serializeInputs(jsonIndx, ln){
+    var hashToComplete = {};
+    var inputName = this.args['inputs'][jsonIndx];
     var values = {};
     var inPoint;
     for (inPoint of this.in) {
-      hashKey = inPoint.label.value;
-      otherSideHandles = this.getOtherSideHandles(inPoint);
-      values[hashKey] = (otherSideHandles[0].serialize());
+      Object.assign(values, inPoint.serialize());
     }
-    return values;
+    hashToComplete[inputName] = values;
+    return hashToComplete;
 
   }
 }

@@ -36,7 +36,7 @@ export default class Handle {
 
     // make the handle draggable
     this.draggie = new Draggabilly(this.elem, {
-      // handle: '.handle',
+      handle: '.draggable > *:not(input):not(img)',
       containment: '.zone'
     });
 
@@ -120,6 +120,7 @@ export default class Handle {
     Handle.all.push(this);
   }
 
+  // create inputs points according to inPoints array
   createInputs(inPoints, inputIndxStart) {
     var type = 'in';
     // create the inputs points and save refs to them
@@ -129,20 +130,16 @@ export default class Handle {
     }
   }
 
-  createPoint(type, inPoint) {
+  // create a point with type (in or out) and name
+  createPoint(type, name) {
     var acceptMultipleConnections;
     acceptMultipleConnections = (this.name === 'array');
-    this.in.push(new Point(this.elem, this, type, inPoint, acceptMultipleConnections));
+    this.in.push(new Point(this.elem, this, type, name, acceptMultipleConnections));
   }
 
+  // add event listener on the DOM elem
   addEventListener (eventType, fn, disp) {
     this.elem.addEventListener(eventType, fn, disp);
-  }
-
-  // return true if the elem is located inside the handle
-  contains (elem) {
-    var rectPoint = this.elem.getBoundingClientRect();
-    return (elem.x <= rectPoint.right) && (elem.x >= rectPoint.left) && (elem.y <= rectPoint.bottom) && (elem.y >= rectPoint.top);
   }
 
   // delte the current handle
@@ -163,6 +160,7 @@ export default class Handle {
     Handle.all.splice(i, 1);
   }
 
+  // serialize the current handle
   serialize () {
     var json = {};
     json['type'] = this.args['type'];
@@ -178,42 +176,29 @@ export default class Handle {
       json['arguments'] = {};
       hashToComplete = json['arguments'];
     }
-    var i;
-    var inputName;
-    for (i = 0; i < ln; i++) {
-      inputName = this.args['inputs'][jsonIndx];
-      hashToComplete[inputName] = this.serializeInput(i);
-      jsonIndx++;
-    }
+    Object.assign(hashToComplete, this.serializeInputs(jsonIndx, ln));
     return json;
   }
 
-  serializeInput(i){
-    var j, ln2;
-    var otherSideHandles = this.getOtherSideHandles(this.in[i]);
-    ln2 = otherSideHandles.length;
-    if (ln2 === 0) {
-      return null;
-    } else if (this.name === 'array') {
-      var values = [];
-      for (j = 0; j < ln2; j++) {
-        values.push(otherSideHandles[j].serialize());
-      }
-      return values;
-    } else if (ln2 === 1) {
-      return otherSideHandles[0].serialize();
+  // serialize input number i of current handle
+  serializeInputs(jsonIndx, ln){
+    var i;
+    var inputName;
+    var hashToComplete = {};
+    for (i = 0; i < ln; i++) {
+      inputName = this.args['inputs'][jsonIndx];
+      hashToComplete[inputName] = this.in[i].serialize();
+      jsonIndx++;
     }
-
+    return hashToComplete;
   }
 
-  getOtherSideHandles (input) {
-    return input.getOtherSideHandles();
-  }
-
+  // set input field value (if exists)
   setInputField (value) {
     if (this.inputField) { this.inputField.value = value; }
   }
 
+  // set the style css of the elem
   setStyle (style) {
     var i;
     var prop, val;
@@ -224,6 +209,7 @@ export default class Handle {
     }
   }
 
+  // Move handle from nbpx px in the pos direction
   addSpace (pos, nbpx) {
     this.elem.style[pos] = parseFloat(this.elem.style[pos].replace('px', '')) + nbpx + 'px';
   }
@@ -244,12 +230,6 @@ export default class Handle {
         return Handle.all[i];
       }
     }
-  }
-
-  static getDOM(target){
-    var t = target;
-    while (t && t.className && !t.className.includes('draggable')) { t = t.parentNode; }
-    return t;
   }
 }
 

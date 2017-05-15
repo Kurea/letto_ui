@@ -56,6 +56,7 @@ export default class Menu {
     }
   }
 
+  // add a module when cliked in the menu
   addModuleOnMenuClick (e) {
     var name = e.target.innerHTML;
     Menu.addModule(name);
