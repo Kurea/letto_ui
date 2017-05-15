@@ -22,3 +22,13 @@ npm run build-prod
 ```
 
 ### Launch UI with [index.html](index.html)
+
+## TODO
+x permit select in inputfields
+x better remove button click in hash handles
+- screen limits update
+- error checking on save workflow
+- refactoring to comply with ES6 standards
+- specs
+- API integration
+x error messages on error checking

@@ -41,8 +41,8 @@ export default class Handle {
     });
 
     // make the lines to update with the handle
-    this.draggie.on('pointerMove', function (event, pointer, moveVector) {
-      /*var zone = document.querySelector('.zone');
+    this.draggie.on('dragMove', function (event, pointer, moveVector) {
+      var zone = document.querySelector('.zone');
       var increment = 100;
       var offsetWidth = zone.offsetWidth;
       var offsetHeight = zone.offsetHeight;
@@ -50,7 +50,7 @@ export default class Handle {
       var offsetTop = zone.offsetTop;
       var scrollLeft = zone.scrollLeft;
       var scrollTop = zone.scrollTop;
-      var target = Handle.getDOM(event.target);
+      var target = this.element;
       if (!target) return;
       // if draggie is near the border of zone --> replace the limit of zone
       if (((offsetWidth + offsetLeft) < (event.x + 100)) && moveVector.x > 0) {
@@ -60,7 +60,7 @@ export default class Handle {
         if (target && target.jsObject) {
           target.jsObject.draggie.dragPoint.x = target.jsObject.draggie.dragPoint.x + increment / 10;
           target.jsObject.draggie.positionDrag();
-          // target.jsObject.addSpace('left', increment/10);
+          target.jsObject.addSpace('left', increment/10);
         }
       }
       if ((offsetLeft + 100 > event.x) && moveVector.x < 0) {
@@ -87,12 +87,13 @@ export default class Handle {
           target.jsObject.draggie.position.y = target.jsObject.draggie.position.y + increment / 10;
           target.jsObject.addSpace('top', increment / 10);
         }
-      }*/
+      }
       Line.each('update'); // updating all lines is faster than selecting the lines to be updated
     });
 
     this.draggie.on('dragEnd', function (event, pointer) {
       Line.each('update'); // updating all lines is faster than selecting the lines to be updated
+      console.log();
     });
 
     var inputIndxStart = 0;
@@ -212,6 +213,7 @@ export default class Handle {
   // Move handle from nbpx px in the pos direction
   addSpace (pos, nbpx) {
     this.elem.style[pos] = parseFloat(this.elem.style[pos].replace('px', '')) + nbpx + 'px';
+    //console.log(this.elem.style[pos]);
   }
 
   // execute fn function on each elem
