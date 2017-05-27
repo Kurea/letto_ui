@@ -4,8 +4,14 @@ module.exports = {
         "es6": true
     },
     "extends": "eslint:recommended",
+    "plugins": [
+      "react"
+    ],
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
     },
     "rules": {
         "indent": [
@@ -23,6 +29,8 @@ module.exports = {
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error"
     }
 };
