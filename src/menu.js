@@ -2,45 +2,42 @@ import { SUPPORTED_TYPES, SUPPORTED_CATEGORY_TYPES, EXPECTED_HANDLE_ARGS } from 
 import Handle from './handle';
 import HashHandle from './hash_handle';
 import ValueHandle from './value_handle';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class Menu {
-  constructor (container) {
-    this.addFunctions(container, SUPPORTED_TYPES);
+function MenuModule(props) {
+  function handleClick(e) {
+    e.preventDefault();
+    MenuX.addModule(props.functionName);
   }
+  if (props.isCategory) {
+    return <dt>{props.functionName}</dt>;
+  } else {
+    return <dd onClick={handleClick}>{props.functionName}</dd>;
+  }
+}
 
-  // add a function to the menu
-  // type is dt or dd
-  // name is the display name
-  // event Listener optional to add an eventlistener
-  addFunctionToMenu (container, fntype, functionName, eventListener) {
-    var fn = container.ownerDocument.createElement(fntype);
-    fn.innerHTML = functionName;
-    container.appendChild(fn);
-    if (eventListener) {
-      fn.addEventListener('click', eventListener);
+MenuModule.propTypes = {
+  functionName: PropTypes.string.isRequired,
+  isCategory: PropTypes.boolean
+};
+
+export function Menu(props) {
+  const categories = SUPPORTED_TYPES.filter((e) => {return e !== 'workflow';});
+  const categoriesTitle = categories.map((category) => {
+    if (SUPPORTED_CATEGORY_TYPES[category]) {
+      const categoryTitle = <MenuModule functionName={category} isCategory />;
+      const modulesTitles = SUPPORTED_CATEGORY_TYPES[category].map((module) => {return <MenuModule functionName={module}  isCategory={false} />;});
+      const modules = [categoryTitle].concat(modulesTitles);
+      return modules;
     }
-  }
+    return false;
+  });
+  return <dl>{categoriesTitle}</dl>;
 
-  // add all functions to the menu
-  addFunctions (container, table) {
-    var i;
-    var ln = table.length;
-    var objectName;
-    for (i = 0; i < ln; i++) {
-      objectName = table[i];
-      // if arguments are described, it is a handle
-      if (SUPPORTED_TYPES.indexOf(objectName) !== -1) {
-        if (objectName !== 'workflow') {
-          this.addFunctionToMenu(container, 'dt', objectName);
-          // add all handler of this category
-          this.addFunctions(container, SUPPORTED_CATEGORY_TYPES[objectName]);
-        }
-      } else { // it is a category
-        this.addFunctionToMenu(container, 'dd', objectName, this.addModuleOnMenuClick);
-      }
-    }
-  }
+}
 
+export default class MenuX {
   // add a module to the board
   static addModule (name, style) {
     var zone = document.querySelector('.zone');
@@ -54,11 +51,5 @@ export default class Menu {
     } else {
       return new Handle(zone, name, EXPECTED_HANDLE_ARGS[name], style);
     }
-  }
-
-  // add a module when cliked in the menu
-  addModuleOnMenuClick (e) {
-    var name = e.target.innerHTML;
-    Menu.addModule(name);
   }
 }

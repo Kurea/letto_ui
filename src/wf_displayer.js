@@ -1,5 +1,5 @@
 import Handle from './handle';
-import Menu from './menu';
+import MenuX from './menu';
 import Line from './line';
 import { NAME_FROM_TYPE, EXPECTED_HANDLE_ARGS, WF } from './api';
 
@@ -16,7 +16,7 @@ function addWorkflowBox () {
   // workflow shoud be in the middle of the zone
   var tpos = (zspace.bottom - zspace.top) / 2 - 50; // add half the workflow box size
   var style = 'left:' + rpos + 'px; top:' + tpos + 'px;';
-  Menu.addModule('workflow', style);
+  MenuX.addModule('workflow', style);
 }
 
 // auto render the existing workflow
@@ -125,7 +125,7 @@ export function displayWorkflow () {
 function displayModule (wf, parent, inputn) {
   if (!wf) return;
   var name = wf[NAME_FROM_TYPE[wf['type']]]; // get the the field containing the name of the handle from its type
-  var m = Menu.addModule(name); // create handle
+  var m = MenuX.addModule(name); // create handle
   // add line between modules
   if (parent) {
     var l = new Line(document);
